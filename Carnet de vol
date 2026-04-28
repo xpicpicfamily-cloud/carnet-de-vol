@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Carnet de Vol</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0e17;--panel:#111827;--panel2:#1a2236;--accent:#00d4ff;--accent2:#ff6b35;--green:#00ff88;--plane:#ff9f43;--sim:#b06aff;--text:#e2e8f0;--muted:#64748b;--border:rgba(0,212,255,0.2);--night:#7c6fcd;--day:#f6c90e;--font-mono:'Share Tech Mono',monospace;--font:'Barlow',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+  .app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;}
+ 
+  /* ── SETUP SCREEN ── */
+  .setup-screen{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;}
+  .setup-logo{text-align:center;margin-bottom:24px;}
+  .setup-logo .icon{font-size:48px;margin-bottom:8px;}
+  .setup-logo h1{font-size:22px;font-weight:700;letter-spacing:0.05em;}
+  .setup-logo p{font-family:var(--font-mono);font-size:11px;color:var(--accent);margin-top:4px;}
+  .setup-section{margin-bottom:20px;}
+  .setup-section-title{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .setup-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .setup-field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+  .setup-field label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+  .setup-field input{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:11px 14px;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;transition:border-color 0.2s;width:100%;}
+  .setup-field input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,212,255,0.1);}
+  .setup-note{font-family:var(--font-mono);font-size:10px;color:var(--muted);padding:10px 14px;background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:6px;line-height:1.6;margin-bottom:16px;}
+  .setup-note a{color:var(--accent);}
+  .btn-setup{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent) 0%,#0066ff 100%);border:none;border-radius:10px;color:#000;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,0.3);}
+  .btn-setup:active{transform:scale(0.98);}
+ 
+  /* ── MAIN APP ── */
+  header{padding:18px 20px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,212,255,0.05) 0%,transparent 100%);position:relative;}
+  header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+  .header-top{display:flex;align-items:center;gap:12px;}
+  .logo{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#0066ff);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .app-name{font-size:18px;font-weight:700;letter-spacing:0.05em;}
+  .app-sub{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:0.1em;}
+  .pilot-badge{margin-left:auto;font-family:var(--font-mono);font-size:10px;color:var(--muted);text-align:right;line-height:1.5;}
+  .pilot-badge span{display:block;color:var(--green);font-size:11px;}
+  .status-bar{display:flex;gap:16px;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--border);}
+  .stat{display:flex;flex-direction:column;gap:2px;}
+  .stat-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+  .stat-value{font-family:var(--font-mono);font-size:15px;color:var(--accent);}
+  .stat-value.orange{color:var(--accent2);}
+  .stat-value.green{color:var(--green);}
+  .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel);}
+  .tab{flex:1;padding:11px 4px;text-align:center;font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase;}
+  .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,212,255,0.05);}
+  .content{flex:1;padding:16px 20px;overflow-y:auto;}
+  .section-title{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .type-toggle{display:flex;gap:8px;margin-bottom:16px;}
+  .type-btn{flex:1;padding:10px 6px;border:1px solid var(--border);border-radius:8px;background:var(--panel2);color:var(--muted);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;}
+  .type-btn.active-heli{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.08);}
+  .type-btn.active-plane{border-color:var(--plane);color:var(--plane);background:rgba(255,159,67,0.08);}
+  .type-btn.active-sim{border-color:var(--sim);color:var(--sim);background:rgba(176,106,255,0.08);}
+  .type-icon{display:block;font-size:20px;margin-bottom:3px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  .form-grid.full{grid-template-columns:1fr;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+  .field input,.field select{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;transition:border-color 0.2s;width:100%;-webkit-appearance:none;}
+  .field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(0,212,255,0.1);}
+  .field select option{background:var(--panel);}
+  .clock-group{display:flex;flex-direction:column;gap:5px;}
+  .clock-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;}
+  .clock-row{display:flex;gap:6px;align-items:stretch;}
+  .clock-stamp{flex:1;padding:0 12px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:18px;cursor:pointer;text-align:center;height:44px;display:flex;align-items:center;justify-content:center;user-select:none;position:relative;overflow:hidden;transition:all 0.15s;}
+  .clock-stamp.stamped{border-color:var(--green);color:var(--green);background:rgba(0,255,136,0.07);}
+  .clock-stamp.stamped-plane{border-color:var(--plane);color:var(--plane);background:rgba(255,159,67,0.07);}
+  .clock-stamp.stamped-sim{border-color:var(--sim);color:var(--sim);background:rgba(176,106,255,0.07);}
+  .clock-stamp:active{transform:scale(0.97);}
+  .ripple{position:absolute;border-radius:50%;background:rgba(0,255,136,0.35);transform:scale(0);animation:ripple-anim 0.4s linear;pointer-events:none;}
+  @keyframes ripple-anim{to{transform:scale(4);opacity:0;}}
+  .clock-edit{width:40px;height:44px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+  .clock-edit:hover{border-color:var(--accent);color:var(--accent);}
+  .clock-editor{display:none;margin-top:6px;}
+  .clock-editor.open{display:flex;gap:6px;align-items:center;}
+  .clock-editor input[type="time"]{flex:1;background:var(--panel2);border:1px solid var(--accent);border-radius:6px;padding:8px 12px;color:var(--text);font-family:var(--font-mono);font-size:15px;outline:none;-webkit-appearance:none;}
+  .clock-editor-ok{padding:8px 14px;background:var(--accent);border:none;border-radius:6px;color:#000;font-family:var(--font-mono);font-size:13px;font-weight:700;cursor:pointer;}
+  .clock-editor-cancel{padding:8px 10px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:var(--font-mono);font-size:13px;cursor:pointer;}
+  .duration-block{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:14px;}
+  .duration-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .duration-label{font-family:var(--font-mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+  .duration-value{font-family:var(--font-mono);font-size:22px;color:var(--green);}
+  .dn-bar-wrap{margin-bottom:8px;}
+  .dn-bar{height:8px;border-radius:4px;overflow:hidden;background:var(--panel);display:flex;}
+  .dn-bar-day{background:var(--day);transition:width 0.4s;}
+  .dn-bar-night{background:var(--night);transition:width 0.4s;}
+  .dn-labels{display:flex;justify-content:space-between;margin-top:5px;}
+  .dn-label{font-family:var(--font-mono);font-size:11px;display:flex;align-items:center;gap:5px;}
+  .dn-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dn-dot.day{background:var(--day);}
+  .dn-dot.night{background:var(--night);}
+  .dn-time{font-size:13px;}
+  .gps-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;font-family:var(--font-mono);font-size:11px;color:var(--muted);}
+  .gps-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+  .gps-dot.ok{background:var(--green);box-shadow:0 0 6px rgba(0,255,136,0.5);}
+  .gps-dot.loading{background:var(--accent);animation:pulse 1s infinite;}
+  .gps-dot.error{background:#ff4444;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .gps-text{flex:1;}
+  .gps-refresh{background:none;border:none;color:var(--accent);font-family:var(--font-mono);font-size:11px;cursor:pointer;padding:0;}
+  .sun-times{display:flex;gap:8px;margin-bottom:14px;}
+  .sun-card{flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;text-align:center;}
+  .sun-icon{font-size:14px;margin-bottom:2px;}
+  .sun-label{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;display:block;}
+  .sun-time{font-family:var(--font-mono);font-size:14px;color:var(--text);}
+  .sun-time.civil{font-size:10px;color:var(--muted);}
+  .aircraft-row{display:flex;align-items:flex-end;gap:8px;margin-bottom:14px;}
+  .aircraft-row .field{flex:1;}
+  .aircraft-type-badge{padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--panel2);font-family:var(--font-mono);font-size:12px;white-space:nowrap;color:var(--muted);min-width:90px;text-align:center;height:40px;display:flex;align-items:center;justify-content:center;}
+  .aircraft-type-badge.heli{color:var(--accent);border-color:rgba(0,212,255,0.4);}
+  .aircraft-type-badge.plane{color:var(--plane);border-color:rgba(255,159,67,0.4);}
+  .aircraft-type-badge.sim{color:var(--sim);border-color:rgba(176,106,255,0.4);}
+  .btn-submit{width:100%;padding:15px;background:linear-gradient(135deg,var(--accent) 0%,#0066ff 100%);border:none;border-radius:10px;color:#000;font-family:var(--font);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:all 0.2s;}
+  .btn-submit:active{transform:scale(0.98);}
+  .btn-submit:disabled{background:var(--muted);cursor:not-allowed;}
+  .btn-submit.plane-mode{background:linear-gradient(135deg,var(--plane) 0%,#e55039 100%);}
+  .btn-submit.sim-mode{background:linear-gradient(135deg,var(--sim) 0%,#6a0dad 100%);}
+  .modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
+  .modal-backdrop.show{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;width:100%;max-width:340px;}
+  .modal-title{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;}
+  .modal-grid{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+  .modal-actions{display:flex;gap:8px;}
+  .btn-cancel{flex:1;padding:11px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--font);font-size:13px;cursor:pointer;}
+  .btn-save{flex:2;padding:11px;background:var(--accent);border:none;border-radius:8px;color:#000;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;}
+  .btn-danger{flex:1;padding:11px;background:#ff4444;border:none;border-radius:8px;color:#fff;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;}
+  .loading-overlay{display:none;position:fixed;inset:0;background:rgba(10,14,23,0.8);backdrop-filter:blur(4px);z-index:150;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+  .loading-overlay.show{display:flex;}
+  .loading-ring{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;}
+  .loading-text{font-family:var(--font-mono);font-size:13px;color:var(--accent);letter-spacing:0.1em;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#000;padding:12px 24px;border-radius:30px;font-weight:700;font-size:14px;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:300;white-space:nowrap;}
+  .toast.error{background:#ff4444;color:#fff;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .flight-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .flight-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+  .flight-card.plane-card::before{background:var(--plane);}
+  .flight-card.sim-card::before{background:var(--sim);}
+  .flight-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+  .flight-date{font-family:var(--font-mono);font-size:11px;color:var(--muted);}
+  .flight-duration{font-family:var(--font-mono);font-size:14px;color:var(--green);}
+  .flight-route{font-size:15px;font-weight:600;margin-bottom:6px;}
+  .flight-arrow{color:var(--accent);margin:0 6px;}
+  .flight-meta{display:flex;gap:8px;font-family:var(--font-mono);font-size:11px;color:var(--muted);flex-wrap:wrap;}
+  .flight-meta span{color:var(--text);}
+  .dn-mini{display:flex;gap:6px;margin-top:6px;}
+  .dn-pill{font-size:10px;padding:2px 8px;border-radius:4px;font-family:var(--font-mono);}
+  .dn-pill.day{background:rgba(246,201,14,0.15);color:var(--day);}
+  .dn-pill.night{background:rgba(124,111,205,0.15);color:var(--night);}
+  .type-chip{font-size:10px;padding:2px 7px;border-radius:4px;font-family:var(--font-mono);}
+  .type-chip.heli{background:rgba(0,212,255,0.15);color:var(--accent);}
+  .type-chip.plane{background:rgba(255,159,67,0.15);color:var(--plane);}
+  .type-chip.sim{background:rgba(176,106,255,0.15);color:var(--sim);}
+  .btn-delete{margin-top:8px;width:100%;padding:7px;background:transparent;border:1px solid rgba(255,68,68,0.3);border-radius:6px;color:#ff6666;font-family:var(--font-mono);font-size:11px;cursor:pointer;transition:all 0.2s;}
+  .btn-delete:hover{background:rgba(255,68,68,0.1);border-color:#ff4444;}
+  .empty-state{text-align:center;padding:40px 20px;color:var(--muted);}
+  .empty-state .icon{font-size:40px;margin-bottom:10px;}
+  .add-aircraft-link{font-family:var(--font-mono);font-size:11px;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;margin-top:4px;display:inline-block;}
+  .fleet-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+  .fleet-reg{font-family:var(--font-mono);font-size:14px;font-weight:600;flex:1;}
+  .fleet-type{font-family:var(--font-mono);font-size:12px;color:var(--muted);flex:1;}
+  .fleet-card .del-btn{flex-shrink:0;width:32px;height:32px;background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.35);border-radius:6px;color:#ff6666;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .settings-link{font-family:var(--font-mono);font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:inline-block;margin-top:8px;}
+  .settings-link:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+ 
+  <!-- ── SETUP SCREEN ── -->
+  <div id="setup-screen" class="setup-screen" style="display:none;">
+    <div class="setup-logo">
+      <div class="icon">✈</div>
+      <h1>CARNET DE VOL</h1>
+      <p>PILOT LOGBOOK — CONFIGURATION</p>
+    </div>
+ 
+    <div class="setup-section">
+      <div class="setup-section-title">Pilote</div>
+      <div class="setup-field">
+        <label>Nom complet</label>
+        <input type="text" id="cfg-pilot-name" placeholder="Jean Dupont">
+      </div>
+      <div class="setup-field">
+        <label>Aérodrome par défaut (OACI)</label>
+        <input type="text" id="cfg-home-base" placeholder="LFPG" autocapitalize="characters" maxlength="4">
+      </div>
+    </div>
+ 
+    <div class="setup-section">
+      <div class="setup-section-title">Google Sheets</div>
+      <div class="setup-note">
+        Suis le guide d'installation pour créer ton Google Sheet et obtenir ton Spreadsheet ID et ta clé API.<br><br>
+        Le Spreadsheet ID se trouve dans l'URL de ton sheet :<br>
+        <code style="color:var(--accent);">docs.google.com/spreadsheets/d/<b>TON_ID</b>/edit</code>
+      </div>
+      <div class="setup-field">
+        <label>Spreadsheet ID</label>
+        <input type="text" id="cfg-sheet-id" placeholder="1ABC...xyz">
+      </div>
+      <div class="setup-field">
+        <label>Email du compte de service</label>
+        <input type="text" id="cfg-client-email" placeholder="mon-app@projet.iam.gserviceaccount.com">
+      </div>
+      <div class="setup-field">
+        <label>Clé privée (depuis le fichier JSON)</label>
+        <input type="text" id="cfg-private-key" placeholder="-----BEGIN PRIVATE KEY-----...">
+      </div>
+    </div>
+ 
+    <button class="btn-setup" onclick="saveConfig()">ENREGISTRER ET DÉMARRER ✓</button>
+  </div>
+ 
+  <!-- ── MAIN APP ── -->
+  <div id="main-app" style="display:none;">
+    <header>
+      <div class="header-top">
+        <div class="logo">✈</div>
+        <div><div class="app-name">CARNET DE VOL</div><div class="app-sub">PILOT LOGBOOK</div></div>
+        <div class="pilot-badge">PILOTE<span id="header-pilot-name">—</span></div>
+      </div>
+    </header>
+    <div class="status-bar">
+      <div class="stat"><div class="stat-label">Vols (session)</div><div class="stat-value" id="stat-flights">0</div></div>
+      <div class="stat"><div class="stat-label">Heures (session)</div><div class="stat-value orange" id="stat-hours">0:00</div></div>
+      <div class="stat"><div class="stat-label">Statut</div><div class="stat-value green" id="stat-status">PRÊT</div></div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('form')">+ Nouveau vol</div>
+      <div class="tab" onclick="switchTab('history')">Historique</div>
+      <div class="tab" onclick="switchTab('fleet')">Flotte</div>
+    </div>
+ 
+    <div class="content" id="tab-form">
+      <div class="section-title">Type d'aéronef</div>
+      <div class="type-toggle">
+        <div class="type-btn active-heli" id="btn-heli" onclick="setType('heli')"><span class="type-icon">🚁</span>Hélicoptère</div>
+        <div class="type-btn" id="btn-plane" onclick="setType('plane')"><span class="type-icon">✈</span>Avion</div>
+        <div class="type-btn" id="btn-sim" onclick="setType('sim')"><span class="type-icon">🖥️</span>Simulateur</div>
+      </div>
+      <div class="section-title">Aéronef</div>
+      <div class="aircraft-row">
+        <div class="field"><label>Immatriculation</label><select id="f-aircraft" onchange="onAircraftChange()"></select></div>
+        <div class="aircraft-type-badge heli" id="aircraft-type-badge">—</div>
+      </div>
+      <span class="add-aircraft-link" onclick="openModal()">+ Ajouter un nouvel aéronef</span>
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="field"><label>Date</label><input type="date" id="f-date" onchange="onDateChange()"></div>
+        <div class="field"><label>Rôle</label>
+          <select id="f-role"><option>PIC</option><option>SIC</option><option>TRI</option><option>TRE</option><option>FI</option><option>PICUS</option><option>SPIC</option><option>FE</option></select>
+        </div>
+      </div>
+      <div class="section-title">Position & Soleil (UTC)</div>
+      <div class="gps-bar">
+        <div class="gps-dot loading" id="gps-dot"></div>
+        <div class="gps-text" id="gps-text">Localisation en cours...</div>
+        <button class="gps-refresh" onclick="getGPS()">↻ Relancer</button>
+      </div>
+      <div class="sun-times">
+        <div class="sun-card"><div class="sun-icon">🌅</div><span class="sun-label">Lever</span><div class="sun-time" id="sun-rise">--:--</div><div class="sun-time civil" id="civil-end">Fin nuit --:--</div></div>
+        <div class="sun-card"><div class="sun-icon">🌇</div><span class="sun-label">Coucher</span><div class="sun-time" id="sun-set">--:--</div><div class="sun-time civil" id="civil-start">Début nuit --:--</div></div>
+        <div class="sun-card"><div class="sun-icon">🌙</div><span class="sun-label">Nuit OACI</span><div class="sun-time" id="night-start" style="color:var(--night);">--:--</div><div class="sun-time civil" id="night-end" style="color:var(--night);">→ --:--</div></div>
+      </div>
+      <div class="section-title">Horaires (UTC)</div>
+      <div class="form-grid">
+        <div class="clock-group">
+          <div class="clock-label">Block Off</div>
+          <div class="clock-row">
+            <div class="clock-stamp" id="stamp-off" onclick="stampTime('off',event)">--:--</div>
+            <button class="clock-edit" onclick="toggleEditor('off')">✎</button>
+          </div>
+          <div class="clock-editor" id="editor-off">
+            <input type="time" id="edit-off-input">
+            <button class="clock-editor-ok" onclick="applyEdit('off')">OK</button>
+            <button class="clock-editor-cancel" onclick="closeEditor('off')">✕</button>
+          </div>
+        </div>
+        <div class="clock-group">
+          <div class="clock-label">Block On</div>
+          <div class="clock-row">
+            <div class="clock-stamp" id="stamp-on" onclick="stampTime('on',event)">--:--</div>
+            <button class="clock-edit" onclick="toggleEditor('on')">✎</button>
+          </div>
+          <div class="clock-editor" id="editor-on">
+            <input type="time" id="edit-on-input">
+            <button class="clock-editor-ok" onclick="applyEdit('on')">OK</button>
+            <button class="clock-editor-cancel" onclick="closeEditor('on')">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="duration-block">
+        <div class="duration-main"><div class="duration-label">Durée totale</div><div class="duration-value" id="duration-display">--:--</div></div>
+        <div class="dn-bar-wrap" id="dn-wrap" style="display:none;">
+          <div class="dn-bar"><div class="dn-bar-day" id="dn-bar-day" style="width:50%;"></div><div class="dn-bar-night" id="dn-bar-night" style="width:50%;"></div></div>
+          <div class="dn-labels">
+            <div class="dn-label"><span class="dn-dot day"></span>Jour <span class="dn-time" id="dn-day-val">--:--</span></div>
+            <div class="dn-label"><span class="dn-dot night"></span>Nuit <span class="dn-time" id="dn-night-val">--:--</span></div>
+          </div>
+        </div>
+        <div id="dn-no-gps" style="font-family:var(--font-mono);font-size:10px;color:var(--muted);">En attente GPS pour le calcul jour/nuit.</div>
+      </div>
+      <div class="section-title">Itinéraire</div>
+      <div class="form-grid">
+        <div class="field"><label>Départ</label><input type="text" id="f-from" autocapitalize="characters"></div>
+        <div class="field"><label>Arrivée</label><input type="text" id="f-to" autocapitalize="characters"></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Atterrissages</label><input type="number" id="f-ldgs" value="1" min="0" max="99"></div>
+        <div class="field"><label>Approches IFR</label><input type="number" id="f-ifr-app" value="0" min="0" max="99"></div>
+      </div>
+      <div class="form-grid full" style="margin-bottom:6px;">
+        <div class="field"><label>Heures IFR</label><input type="text" id="f-ifr-h" placeholder="0:00"></div>
+      </div>
+      <div class="form-grid full" style="margin-bottom:6px;">
+        <div class="field"><label>Équipage</label><input type="text" id="f-pilots"></div>
+      </div>
+      <button class="btn-submit" id="btn-submit" onclick="submitFlight()">⊕ ENREGISTRER LE VOL</button>
+      <div style="text-align:center;margin-top:12px;">
+        <span class="settings-link" onclick="openSettings()">⚙ Paramètres</span>
+      </div>
+    </div>
+ 
+    <div class="content" id="tab-history" style="display:none;">
+      <div class="section-title">Vols de cette session</div>
+      <div id="history-list"><div class="empty-state"><div class="icon">🛫</div><p>Aucun vol enregistré.</p></div></div>
+    </div>
+ 
+    <div class="content" id="tab-fleet" style="display:none;">
+      <div class="section-title">Flotte enregistrée</div>
+      <div id="fleet-list"></div>
+      <button class="btn-submit" style="margin-top:8px;" onclick="openModal()">+ Ajouter un aéronef</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- Modal aéronef -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-title">Nouvel aéronef</div>
+    <div class="modal-grid">
+      <div class="field"><label>Immatriculation</label><input type="text" id="m-reg" autocapitalize="characters" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;width:100%;"></div>
+      <div class="field"><label>Type / Modèle</label><input type="text" id="m-type" placeholder="AW139, C172..." style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;width:100%;"></div>
+      <div class="field"><label>Catégorie</label>
+        <select id="m-cat" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:14px;outline:none;width:100%;-webkit-appearance:none;">
+          <option value="heli">Hélicoptère</option><option value="plane">Avion</option><option value="sim">Simulateur</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="addAircraft()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- Modal suppression -->
+<div class="modal-backdrop" id="modal-delete">
+  <div class="modal">
+    <div class="modal-title" style="color:#ff4444;">⚠ Supprimer ce vol</div>
+    <p style="font-family:var(--font);font-size:13px;color:var(--muted);margin-bottom:16px;" id="delete-confirm-text"></p>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDeleteModal()">Annuler</button>
+      <button class="btn-danger" onclick="confirmDelete()">Supprimer</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- Modal paramètres -->
+<div class="modal-backdrop" id="modal-settings">
+  <div class="modal">
+    <div class="modal-title">⚙ Paramètres</div>
+    <div class="modal-grid">
+      <div class="field"><label>Nom du pilote</label><input type="text" id="s-pilot-name" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
+      <div class="field"><label>Aérodrome par défaut</label><input type="text" id="s-home-base" autocapitalize="characters" maxlength="4" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
+      <div class="field"><label>Spreadsheet ID</label><input type="text" id="s-sheet-id" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:11px;outline:none;width:100%;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSettings()">Annuler</button>
+      <button class="btn-save" onclick="saveSettings()">Enregistrer</button>
+    </div>
+    <div style="margin-top:12px;text-align:center;">
+      <span class="settings-link" style="color:#ff6666;" onclick="resetApp()">⚠ Réinitialiser l'application</span>
+    </div>
+  </div>
+</div>
+ 
+<div class="loading-overlay" id="loading"><div class="loading-ring"></div><div class="loading-text" id="loading-text">SYNCHRONISATION...</div></div>
+<div class="toast" id="toast"></div>
+ 
+<script>
+// ── CONFIG (chargée depuis localStorage) ─────────────────────────
+var CONFIG = {};
+ 
+function loadConfig() {
+  try {
+    var s = localStorage.getItem('cvol_config');
+    CONFIG = s ? JSON.parse(s) : {};
+  } catch(e) { CONFIG = {}; }
+}
+ 
+function saveConfigToStorage() {
+  try { localStorage.setItem('cvol_config', JSON.stringify(CONFIG)); } catch(e) {}
+}
+ 
+function isConfigured() {
+  return CONFIG.sheetId && CONFIG.clientEmail && CONFIG.privateKey && CONFIG.pilotName;
+}
+ 
+// ── INIT ──────────────────────────────────────────────────────────
+window.onload = function() {
+  loadConfig();
+  if (isConfigured()) {
+    startApp();
+  } else {
+    document.getElementById('setup-screen').style.display = '';
+  }
+};
+ 
+function saveConfig() {
+  var name  = document.getElementById('cfg-pilot-name').value.trim();
+  var base  = document.getElementById('cfg-home-base').value.trim().toUpperCase();
+  var sid   = document.getElementById('cfg-sheet-id').value.trim();
+  var email = document.getElementById('cfg-client-email').value.trim();
+  var key   = document.getElementById('cfg-private-key').value.trim();
+ 
+  if (!name || !sid || !email || !key) {
+    showToast('⚠ Remplis tous les champs', true); return;
+  }
+  CONFIG = { pilotName: name, homeBase: base||'ZZZZ', sheetId: sid, clientEmail: email, privateKey: key };
+  saveConfigToStorage();
+  document.getElementById('setup-screen').style.display = 'none';
+  startApp();
+}
+ 
+function startApp() {
+  document.getElementById('main-app').style.display = '';
+  document.getElementById('header-pilot-name').textContent = CONFIG.pilotName || '—';
+ 
+  // Default values
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('f-pilots').value = CONFIG.pilotName || '';
+  document.getElementById('f-from').value = CONFIG.homeBase || '';
+  document.getElementById('f-to').value = CONFIG.homeBase || '';
+ 
+  renderAircraftSelect();
+  renderFleet();
+  getGPS();
+}
+ 
+// ── SETTINGS ─────────────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('s-pilot-name').value = CONFIG.pilotName || '';
+  document.getElementById('s-home-base').value  = CONFIG.homeBase  || '';
+  document.getElementById('s-sheet-id').value   = CONFIG.sheetId   || '';
+  document.getElementById('modal-settings').classList.add('show');
+}
+function closeSettings() { document.getElementById('modal-settings').classList.remove('show'); }
+function saveSettings() {
+  CONFIG.pilotName = document.getElementById('s-pilot-name').value.trim() || CONFIG.pilotName;
+  CONFIG.homeBase  = document.getElementById('s-home-base').value.trim().toUpperCase() || CONFIG.homeBase;
+  CONFIG.sheetId   = document.getElementById('s-sheet-id').value.trim() || CONFIG.sheetId;
+  saveConfigToStorage();
+  document.getElementById('header-pilot-name').textContent = CONFIG.pilotName;
+  closeSettings();
+  showToast('✓ Paramètres sauvegardés');
+}
+function resetApp() {
+  if (!confirm('Réinitialiser complètement l\'application ? (flotte et config effacées)')) return;
+  localStorage.clear();
+  location.reload();
+}
+ 
+// ── FLEET ─────────────────────────────────────────────────────────
+function loadFleet() {
+  try { var s = localStorage.getItem('cvol_fleet'); return s ? JSON.parse(s) : {}; }
+  catch(e) { return {}; }
+}
+function saveFleet() { try { localStorage.setItem('cvol_fleet', JSON.stringify(fleet)); } catch(e) {} }
+var fleet = loadFleet();
+ 
+// ── SUN CALC ─────────────────────────────────────────────────────
+function toRad(d){return d*Math.PI/180;}function toDeg(r){return r*180/Math.PI;}
+function calcSunTimes(lat,lon,dateStr){
+  var JD=new Date(dateStr+'T12:00:00Z').getTime()/86400000+2440587.5;
+  var n=Math.floor(JD-2451545.0+0.0008),Jstar=n-lon/360;
+  var M=(357.5291+0.98560028*Jstar)%360;
+  var C=1.9148*Math.sin(toRad(M))+0.0200*Math.sin(toRad(2*M))+0.0003*Math.sin(toRad(3*M));
+  var lam=(M+C+180+102.9372)%360;
+  var Jt=2451545.0+Jstar+0.0053*Math.sin(toRad(M))-0.0069*Math.sin(toRad(2*lam));
+  var dec=toDeg(Math.asin(Math.sin(toRad(lam))*Math.sin(toRad(23.4397))));
+  var cosW=(Math.sin(toRad(-0.833))-Math.sin(toRad(lat))*Math.sin(toRad(dec)))/(Math.cos(toRad(lat))*Math.cos(toRad(dec)));
+  if(cosW<-1||cosW>1)return null;
+  var W=toDeg(Math.acos(cosW));
+  function toUTCMin(J){var d=new Date((J-2440587.5)*86400000);return d.getUTCHours()*60+d.getUTCMinutes();}
+  return{rise:toUTCMin(Jt-W/360),set:toUTCMin(Jt+W/360)};
+}
+function minsToHHMM(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+ 
+var gpsLat=null,gpsLon=null,sunRiseMin=null,sunSetMin=null,nightStartMin=null,nightEndMin=null;
+ 
+function updateSunDisplay(){
+  var date=document.getElementById('f-date').value;
+  if(!gpsLat||!date)return;
+  var s=calcSunTimes(gpsLat,gpsLon,date);
+  if(!s){document.getElementById('sun-rise').textContent='Polaire';return;}
+  sunRiseMin=s.rise;sunSetMin=s.set;nightStartMin=sunSetMin+30;nightEndMin=sunRiseMin-30;
+  document.getElementById('sun-rise').textContent=minsToHHMM(sunRiseMin);
+  document.getElementById('sun-set').textContent=minsToHHMM(sunSetMin);
+  document.getElementById('civil-end').textContent='Fin nuit '+minsToHHMM(nightEndMin);
+  document.getElementById('civil-start').textContent='Début nuit '+minsToHHMM(nightStartMin);
+  document.getElementById('night-start').textContent=minsToHHMM(nightStartMin);
+  document.getElementById('night-end').textContent='→ '+minsToHHMM(nightEndMin);
+  updateDayNight();
+}
+ 
+function calcDayNightMinutes(offMin,onMin,nightStart,nightEnd){
+  var total=onMin-offMin;if(total<0)total+=1440;if(total===0)return{day:0,night:0};
+  var nightMins=0;
+  for(var i=0;i<total;i++){var t=(offMin+i)%1440;if(nightStart>nightEnd?(t>=nightStart||t<nightEnd):(t>=nightStart&&t<nightEnd))nightMins++;}
+  return{night:nightMins,day:total-nightMins};
+}
+ 
+function updateDayNight(){
+  if(!timeOff||!timeOn){document.getElementById('dn-wrap').style.display='none';document.getElementById('dn-no-gps').style.display='';return;}
+  if(nightStartMin===null){document.getElementById('dn-no-gps').style.display='';document.getElementById('dn-wrap').style.display='none';return;}
+  function toM(t){var p=t.split(':').map(Number);return p[0]*60+p[1];}
+  var r=calcDayNightMinutes(toM(timeOff),toM(timeOn),nightStartMin,nightEndMin);
+  var total=r.day+r.night;
+  document.getElementById('dn-no-gps').style.display='none';
+  document.getElementById('dn-wrap').style.display='';
+  document.getElementById('dn-bar-day').style.width=(total>0?Math.round(r.day/total*100):50)+'%';
+  document.getElementById('dn-bar-night').style.width=(total>0?Math.round(r.night/total*100):50)+'%';
+  document.getElementById('dn-day-val').textContent=minsToHHMM(r.day);
+  document.getElementById('dn-night-val').textContent=minsToHHMM(r.night);
+  window._dayMin=r.day;window._nightMin=r.night;
+}
+ 
+function getGPS(){
+  var dot=document.getElementById('gps-dot'),txt=document.getElementById('gps-text');
+  dot.className='gps-dot loading';txt.textContent='Localisation en cours...';
+  if(!navigator.geolocation){dot.className='gps-dot error';txt.textContent='GPS non disponible';return;}
+  navigator.geolocation.getCurrentPosition(
+    function(pos){gpsLat=pos.coords.latitude;gpsLon=pos.coords.longitude;dot.className='gps-dot ok';txt.textContent=gpsLat.toFixed(3)+'° / '+gpsLon.toFixed(3)+'°';updateSunDisplay();},
+    function(){dot.className='gps-dot error';txt.textContent='Accès GPS refusé';},
+    {timeout:10000,maximumAge:300000}
+  );
+}
+function onDateChange(){updateSunDisplay();}
+ 
+// ── CLOCK ─────────────────────────────────────────────────────────
+var timeOff='',timeOn='';
+function stampClass(){return currentType==='plane'?'stamped-plane':currentType==='sim'?'stamped-sim':'stamped';}
+function stampTime(which,event){
+  var now=new Date();
+  var t=now.getUTCHours().toString().padStart(2,'0')+':'+now.getUTCMinutes().toString().padStart(2,'0');
+  var btn=document.getElementById('stamp-'+which);
+  var r=document.createElement('span');r.className='ripple';
+  var sz=Math.max(btn.offsetWidth,btn.offsetHeight);
+  r.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(event.offsetX-sz/2)+'px;top:'+(event.offsetY-sz/2)+'px;';
+  btn.appendChild(r);setTimeout(function(){r.remove();},450);
+  setTime(which,t);
+}
+function setTime(which,t){
+  if(which==='off'){timeOff=t;var b=document.getElementById('stamp-off');b.textContent=t;b.className='clock-stamp '+stampClass();}
+  else{timeOn=t;var b=document.getElementById('stamp-on');b.textContent=t;b.className='clock-stamp '+stampClass();}
+  calcDuration();updateDayNight();
+}
+function toggleEditor(which){
+  var ed=document.getElementById('editor-'+which);
+  if(ed.classList.contains('open')){closeEditor(which);}
+  else{document.getElementById('edit-'+which+'-input').value=which==='off'?timeOff:timeOn;ed.classList.add('open');document.getElementById('edit-'+which+'-input').focus();}
+}
+function applyEdit(which){var v=document.getElementById('edit-'+which+'-input').value;if(v)setTime(which,v);closeEditor(which);}
+function closeEditor(which){document.getElementById('editor-'+which).classList.remove('open');}
+function calcDuration(){
+  if(!timeOff||!timeOn){document.getElementById('duration-display').textContent='--:--';return null;}
+  var oh=+timeOff.split(':')[0],om=+timeOff.split(':')[1],nh=+timeOn.split(':')[0],nm=+timeOn.split(':')[1];
+  var tot=(nh*60+nm)-(oh*60+om);if(tot<0)tot+=1440;
+  var dur=String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
+  document.getElementById('duration-display').textContent=dur;return dur;
+}
+ 
+// ── TYPE ──────────────────────────────────────────────────────────
+var currentType='heli';
+function setType(t){
+  currentType=t;
+  document.getElementById('btn-heli').className='type-btn'+(t==='heli'?' active-heli':'');
+  document.getElementById('btn-plane').className='type-btn'+(t==='plane'?' active-plane':'');
+  document.getElementById('btn-sim').className='type-btn'+(t==='sim'?' active-sim':'');
+  document.getElementById('btn-submit').className='btn-submit'+(t==='plane'?' plane-mode':t==='sim'?' sim-mode':'');
+  if(timeOff)document.getElementById('stamp-off').className='clock-stamp '+stampClass();
+  if(timeOn)document.getElementById('stamp-on').className='clock-stamp '+stampClass();
+  renderAircraftSelect();
+}
+ 
+// ── AIRCRAFT ──────────────────────────────────────────────────────
+function renderAircraftSelect(){
+  var sel=document.getElementById('f-aircraft'),prev=sel.value;sel.innerHTML='';
+  var filtered=Object.entries(fleet).filter(function(e){return e[1].cat===currentType;});
+  if(filtered.length===0){var o=document.createElement('option');o.value='';o.textContent='— Aucun aéronef —';sel.appendChild(o);}
+  else filtered.forEach(function(e){var o=document.createElement('option');o.value=e[0];o.textContent=e[0];sel.appendChild(o);});
+  if(prev&&fleet[prev]&&fleet[prev].cat===currentType)sel.value=prev;
+  onAircraftChange();
+}
+function onAircraftChange(){
+  var reg=document.getElementById('f-aircraft').value,badge=document.getElementById('aircraft-type-badge');
+  if(fleet[reg]){badge.textContent=fleet[reg].type;badge.className='aircraft-type-badge '+fleet[reg].cat;}
+  else{badge.textContent='—';badge.className='aircraft-type-badge';}
+}
+ 
+// ── TABS ──────────────────────────────────────────────────────────
+function switchTab(t){
+  ['form','history','fleet'].forEach(function(id){document.getElementById('tab-'+id).style.display=id===t?'':'none';});
+  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',['form','history','fleet'][i]===t);});
+}
+ 
+// ── MODAL aéronef ─────────────────────────────────────────────────
+function openModal(){document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');document.getElementById('m-reg').value='';document.getElementById('m-type').value='';}
+function addAircraft(){
+  var reg=document.getElementById('m-reg').value.trim().toUpperCase(),type=document.getElementById('m-type').value.trim(),cat=document.getElementById('m-cat').value;
+  if(!reg||!type){showToast('⚠ Remplis immatriculation et type',true);return;}
+  fleet[reg]={type:type,cat:cat};saveFleet();closeModal();renderAircraftSelect();renderFleet();showToast('✓ '+reg+' ajouté');
+}
+function renderFleet(){
+  var labels={heli:'🚁 Hélico',plane:'✈ Avion',sim:'🖥️ Sim'};
+  var html=Object.entries(fleet).map(function(e){
+    var reg=e[0],v=e[1];
+    return '<div class="fleet-card"><div class="fleet-reg">'+reg+'</div><div class="fleet-type">'+v.type+'</div><span class="type-chip '+v.cat+'">'+(labels[v.cat]||v.cat)+'</span><div style="flex:1"></div><button class="del-btn" onclick="deleteAircraft(\''+reg+'\')">✕</button></div>';
+  }).join('');
+  document.getElementById('fleet-list').innerHTML=html||'<div style="color:var(--muted);font-family:var(--font-mono);font-size:12px;padding:12px;">Aucun aéronef.</div>';
+}
+function deleteAircraft(reg){if(!confirm('Supprimer '+reg+' ?'))return;delete fleet[reg];saveFleet();renderAircraftSelect();renderFleet();showToast('✓ '+reg+' supprimé');}
+ 
+// ── DELETE MODAL ──────────────────────────────────────────────────
+var pendingDeleteIdx=null;
+function openDeleteModal(idx){
+  pendingDeleteIdx=idx;var f=sessionFlights[idx];
+  document.getElementById('delete-confirm-text').textContent=f.date+' · '+f.from+'→'+f.to+' · '+f.dur;
+  document.getElementById('modal-delete').classList.add('show');
+}
+function closeDeleteModal(){document.getElementById('modal-delete').classList.remove('show');pendingDeleteIdx=null;}
+async function confirmDelete(){
+  if(pendingDeleteIdx===null)return;
+  var f=sessionFlights[pendingDeleteIdx];closeDeleteModal();
+  if(!f.sheetRow){showToast('⚠ Numéro de ligne inconnu',true);return;}
+  setLoading(true,'SUPPRESSION...');
+  try{
+    var token=await getToken();
+    var SHEET_MAP={heli:'Hélicoptère',plane:'Avion',sim:'Simulateur'};
+    var sheetName=SHEET_MAP[f.cat]||'Hélicoptère';
+    var metaResp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+'?fields=sheets.properties',{headers:{'Authorization':'Bearer '+token}});
+    var metaData=await metaResp.json();
+    var sheetObj=metaData.sheets.find(function(s){return s.properties.title===sheetName;});
+    if(!sheetObj)throw new Error('Feuille introuvable');
+    var sheetId=sheetObj.properties.sheetId;
+    var delResp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+':batchUpdate',{
+      method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({requests:[{deleteDimension:{range:{sheetId:sheetId,dimension:'ROWS',startIndex:f.sheetRow-1,endIndex:f.sheetRow}}}]})
+    });
+    if(!delResp.ok){var e=await delResp.json();throw new Error(e.error&&e.error.message||delResp.statusText);}
+    sessionFlights.forEach(function(sf){if(sf.sheetRow&&sf.sheetRow>f.sheetRow&&sf.cat===f.cat)sf.sheetRow--;});
+    var dur=f.dur.split(':').map(Number);sessionMinutes-=dur[0]*60+dur[1];
+    sessionFlights.splice(pendingDeleteIdx,1);
+    updateStats();updateHistory();showToast('✓ Vol supprimé');
+  }catch(e){showToast('✗ '+e.message,true);}
+  finally{setLoading(false);}
+}
+ 
+// ── AUTH ──────────────────────────────────────────────────────────
+var accessToken=null,tokenExpiry=0;
+function b64u(s){return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+function b64ua(a){return btoa(String.fromCharCode.apply(null,a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
+async function getToken(){
+  if(accessToken&&Date.now()<tokenExpiry)return accessToken;
+  var now=Math.floor(Date.now()/1000);
+  var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
+  var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
+  var pem=CONFIG.privateKey.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  var der=Uint8Array.from(atob(pem),function(c){return c.charCodeAt(0);});
+  var key=await crypto.subtle.importKey('pkcs8',der,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
+  var sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(hdr+'.'+clm));
+  var jwt=hdr+'.'+clm+'.'+b64ua(new Uint8Array(sig));
+  var r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion='+jwt});
+  var d=await r.json();if(!d.access_token)throw new Error(JSON.stringify(d));
+  accessToken=d.access_token;tokenExpiry=Date.now()+(d.expires_in-60)*1000;return accessToken;
+}
+ 
+// ── SUBMIT ────────────────────────────────────────────────────────
+var sessionFlights=[],sessionMinutes=0;
+var SHEET_MAP={heli:'Hélicoptère',plane:'Avion',sim:'Simulateur'};
+ 
+async function submitFlight(){
+  var date=document.getElementById('f-date').value,ac=document.getElementById('f-aircraft').value;
+  var from=document.getElementById('f-from').value.trim().toUpperCase(),to=document.getElementById('f-to').value.trim().toUpperCase();
+  var role=document.getElementById('f-role').value,ldgs=document.getElementById('f-ldgs').value;
+  var pilots=document.getElementById('f-pilots').value.trim();
+  var ifrH=document.getElementById('f-ifr-h').value.trim()||'';
+  var ifrApp=document.getElementById('f-ifr-app').value||'0';
+  if(!date||!timeOff||!timeOn||!from||!to){showToast('⚠ Remplis tous les champs',true);return;}
+  if(!ac){showToast('⚠ Ajoute un aéronef dans l\'onglet Flotte',true);switchTab('fleet');return;}
+  var dur=calcDuration();if(!dur)return;
+  var ys=date.split('-'),dateF=ys[2]+'.'+ys[1]+'.'+ys[0];
+  var acType=fleet[ac]?fleet[ac].type:'';
+  var catLabel=currentType==='heli'?'Hélicoptère':currentType==='plane'?'Avion':'Simulateur';
+  var dayH=window._dayMin!==undefined?minsToHHMM(window._dayMin):'';
+  var nightH=window._nightMin!==undefined?minsToHHMM(window._nightMin):'';
+  var multi_types=['AW139','BK117C1','H225','H145','AW139 SIM','H225 SIM','H145 SIM'];
+  var isMulti=multi_types.indexOf(acType)>=0;
+  var monoH=isMulti?'':dur,multiH=isMulti?dur:'';
+  var sheetName=SHEET_MAP[currentType]||'Hélicoptère';
+  var row=[dateF,role,timeOff,timeOn,dur,ldgs,ac,acType,catLabel,from,to,pilots,monoH,multiH,dayH,nightH,ifrH,ifrApp];
+  setLoading(true,'→ '+sheetName+'...');
+  try{
+    var token=await getToken();
+    // Insert at row 3
+    var metaResp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+'?fields=sheets.properties',{headers:{'Authorization':'Bearer '+token}});
+    var metaData=await metaResp.json();
+    var sheetObj=metaData.sheets.find(function(s){return s.properties.title===sheetName;});
+    if(!sheetObj)throw new Error('Feuille introuvable: '+sheetName);
+    var sheetId=sheetObj.properties.sheetId;
+    var insertResp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+':batchUpdate',{
+      method:'POST',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({requests:[{insertDimension:{range:{sheetId:sheetId,dimension:'ROWS',startIndex:2,endIndex:3},inheritFromBefore:false}}]})
+    });
+    if(!insertResp.ok){var e=await insertResp.json();throw new Error(e.error&&e.error.message||insertResp.statusText);}
+    var resp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+'/values/'+encodeURIComponent(sheetName)+'!A3:R3?valueInputOption=USER_ENTERED',{
+      method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({values:[row]})
+    });
+    if(!resp.ok){var e2=await resp.json();throw new Error(e2.error&&e2.error.message||resp.statusText);}
+    var dp=dur.split(':').map(Number);sessionMinutes+=dp[0]*60+dp[1];
+    sessionFlights.unshift({date:dateF,off:timeOff,on:timeOn,dur:dur,ac:ac,acType:acType,cat:currentType,from:from,to:to,role:role,ldgs:ldgs,dayH:dayH,nightH:nightH,sheetRow:3});
+    updateStats();updateHistory();
+    showToast('✓ Enregistré → '+sheetName);
+    resetForm();
+  }catch(e){showToast('✗ '+e.message,true);}
+  finally{setLoading(false);}
+}
+ 
+function resetForm(){
+  timeOff='';timeOn='';window._dayMin=undefined;window._nightMin=undefined;
+  ['off','on'].forEach(function(w){document.getElementById('stamp-'+w).textContent='--:--';document.getElementById('stamp-'+w).className='clock-stamp';closeEditor(w);});
+  document.getElementById('f-from').value=CONFIG.homeBase||'';
+  document.getElementById('f-to').value=CONFIG.homeBase||'';
+  document.getElementById('f-ldgs').value='1';
+  document.getElementById('f-ifr-h').value='';
+  document.getElementById('f-ifr-app').value='0';
+  document.getElementById('duration-display').textContent='--:--';
+  document.getElementById('dn-wrap').style.display='none';
+  document.getElementById('dn-no-gps').style.display='';
+}
+ 
+function updateStats(){
+  document.getElementById('stat-flights').textContent=sessionFlights.length;
+  document.getElementById('stat-hours').textContent=String(Math.floor(sessionMinutes/60)).padStart(2,'0')+':'+String(sessionMinutes%60).padStart(2,'0');
+  document.getElementById('stat-status').textContent='SYNC ✓';
+}
+ 
+function updateHistory(){
+  var list=document.getElementById('history-list');
+  var labels={heli:'🚁 Hélico',plane:'✈ Avion',sim:'🖥️ Sim'};
+  if(!sessionFlights.length){list.innerHTML='<div class="empty-state"><div class="icon">🛫</div><p>Aucun vol enregistré.</p></div>';return;}
+  list.innerHTML=sessionFlights.map(function(f,idx){
+    return '<div class="flight-card '+(f.cat==='plane'?'plane-card':f.cat==='sim'?'sim-card':'')+'">'
+      +'<div class="flight-card-header"><div class="flight-date">'+f.date+' · '+f.off+'–'+f.on+' UTC</div><div class="flight-duration">'+f.dur+'</div></div>'
+      +'<div class="flight-route">'+f.from+'<span class="flight-arrow">→</span>'+f.to+'</div>'
+      +'<div class="flight-meta"><div>'+f.ac+' <span>'+f.acType+'</span></div><div>Rôle: <span>'+f.role+'</span></div><span class="type-chip '+f.cat+'">'+(labels[f.cat]||f.cat)+'</span></div>'
+      +(((f.dayH&&f.dayH!=='00:00')||(f.nightH&&f.nightH!=='00:00'))?'<div class="dn-mini">'+(f.dayH&&f.dayH!=='00:00'?'<span class="dn-pill day">☀ Jour '+f.dayH+'</span>':'')+(f.nightH&&f.nightH!=='00:00'?'<span class="dn-pill night">🌙 Nuit '+f.nightH+'</span>':'')+'</div>':'')
+      +'<button class="btn-delete" onclick="openDeleteModal('+idx+')">🗑 Supprimer ce vol</button>'
+      +'</div>';
+  }).join('');
+}
+ 
+function setLoading(on,msg){document.getElementById('loading').classList.toggle('show',on);if(msg)document.getElementById('loading-text').textContent=msg;document.getElementById('btn-submit').disabled=on;}
+function showToast(msg,err){
+  var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'');
+  setTimeout(function(){t.classList.add('show');},10);setTimeout(function(){t.classList.remove('show');},3500);
+}
+</script>
+</body>
+</html>
+ 
