@@ -431,6 +431,8 @@ function saveConfig() {
   if (!name || !sid || !email || !key) {
     showToast('⚠ Remplis tous les champs', true); return;
   }
+  // Nettoyer la clé privée : convertir \n littéraux en vrais sauts de ligne
+  key = key.replace(/\\n/g, '\n').replace(/\r/g, '').trim();
   CONFIG = { pilotName: name, homeBase: base||'ZZZZ', sheetId: sid, clientEmail: email, privateKey: key };
   saveConfigToStorage();
   document.getElementById('setup-screen').style.display = 'none';
@@ -682,15 +684,11 @@ async function getToken(){
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
   var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
-  // Normaliser la clé privée : remplacer les \n littéraux et les vrais sauts de ligne
-  var rawKey = CONFIG.privateKey
-    .replace(/\\n/g, '\n')        // \n littéral -> vrai saut de ligne
-    .replace(/\r/g, '');            // supprimer les \r
-  var pem = rawKey
-    .replace(/-----BEGIN PRIVATE KEY-----/g, '')
-    .replace(/-----END PRIVATE KEY-----/g, '')
-    .replace(/\n/g, '')
-    .replace(/\s/g, '')
+  var pem = CONFIG.privateKey
+    .replace(/\\n/g,'\n')
+    .replace(/-----BEGIN PRIVATE KEY-----/g,'')
+    .replace(/-----END PRIVATE KEY-----/g,'')
+    .replace(/[\n\r\s]/g,'')
     .trim();
   var der=Uint8Array.from(atob(pem),function(c){return c.charCodeAt(0);});
   var key=await crypto.subtle.importKey('pkcs8',der,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
