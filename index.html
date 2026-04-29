@@ -10,7 +10,7 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
   .app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;}
- 
+
   /* ── SETUP SCREEN ── */
   .setup-screen{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;}
   .setup-logo{text-align:center;margin-bottom:24px;}
@@ -28,7 +28,7 @@
   .setup-note a{color:var(--accent);}
   .btn-setup{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent) 0%,#0066ff 100%);border:none;border-radius:10px;color:#000;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,0.3);}
   .btn-setup:active{transform:scale(0.98);}
- 
+
   /* ── MAIN APP ── */
   header{padding:18px 20px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,212,255,0.05) 0%,transparent 100%);position:relative;}
   header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
@@ -171,7 +171,7 @@
 </head>
 <body>
 <div class="app" id="app">
- 
+
   <!-- ── SETUP SCREEN ── -->
   <div id="setup-screen" class="setup-screen" style="display:none;">
     <div class="setup-logo">
@@ -179,7 +179,7 @@
       <h1>CARNET DE VOL</h1>
       <p>PILOT LOGBOOK — CONFIGURATION</p>
     </div>
- 
+
     <div class="setup-section">
       <div class="setup-section-title">Pilote</div>
       <div class="setup-field">
@@ -191,7 +191,7 @@
         <input type="text" id="cfg-home-base" placeholder="LFPG" autocapitalize="characters" maxlength="4">
       </div>
     </div>
- 
+
     <div class="setup-section">
       <div class="setup-section-title">Google Sheets</div>
       <div class="setup-note">
@@ -212,10 +212,10 @@
         <input type="text" id="cfg-private-key" placeholder="-----BEGIN PRIVATE KEY-----...">
       </div>
     </div>
- 
+
     <button class="btn-setup" onclick="saveConfig()">ENREGISTRER ET DÉMARRER ✓</button>
   </div>
- 
+
   <!-- ── MAIN APP ── -->
   <div id="main-app" style="display:none;">
     <header>
@@ -235,7 +235,7 @@
       <div class="tab" onclick="switchTab('history')">Historique</div>
       <div class="tab" onclick="switchTab('fleet')">Flotte</div>
     </div>
- 
+
     <div class="content" id="tab-form">
       <div class="section-title">Type d'aéronef</div>
       <div class="type-toggle">
@@ -324,12 +324,12 @@
         <span class="settings-link" onclick="openSettings()">⚙ Paramètres</span>
       </div>
     </div>
- 
+
     <div class="content" id="tab-history" style="display:none;">
       <div class="section-title">Vols de cette session</div>
       <div id="history-list"><div class="empty-state"><div class="icon">🛫</div><p>Aucun vol enregistré.</p></div></div>
     </div>
- 
+
     <div class="content" id="tab-fleet" style="display:none;">
       <div class="section-title">Flotte enregistrée</div>
       <div id="fleet-list"></div>
@@ -337,7 +337,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Modal aéronef -->
 <div class="modal-backdrop" id="modal">
   <div class="modal">
@@ -357,7 +357,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Modal suppression -->
 <div class="modal-backdrop" id="modal-delete">
   <div class="modal">
@@ -369,7 +369,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Modal paramètres -->
 <div class="modal-backdrop" id="modal-settings">
   <div class="modal">
@@ -388,29 +388,29 @@
     </div>
   </div>
 </div>
- 
+
 <div class="loading-overlay" id="loading"><div class="loading-ring"></div><div class="loading-text" id="loading-text">SYNCHRONISATION...</div></div>
 <div class="toast" id="toast"></div>
- 
+
 <script>
 // ── CONFIG (chargée depuis localStorage) ─────────────────────────
 var CONFIG = {};
- 
+
 function loadConfig() {
   try {
     var s = localStorage.getItem('cvol_config');
     CONFIG = s ? JSON.parse(s) : {};
   } catch(e) { CONFIG = {}; }
 }
- 
+
 function saveConfigToStorage() {
   try { localStorage.setItem('cvol_config', JSON.stringify(CONFIG)); } catch(e) {}
 }
- 
+
 function isConfigured() {
   return CONFIG.sheetId && CONFIG.clientEmail && CONFIG.privateKey && CONFIG.pilotName;
 }
- 
+
 // ── INIT ──────────────────────────────────────────────────────────
 window.onload = function() {
   loadConfig();
@@ -420,14 +420,14 @@ window.onload = function() {
     document.getElementById('setup-screen').style.display = '';
   }
 };
- 
+
 function saveConfig() {
   var name  = document.getElementById('cfg-pilot-name').value.trim();
   var base  = document.getElementById('cfg-home-base').value.trim().toUpperCase();
   var sid   = document.getElementById('cfg-sheet-id').value.trim();
   var email = document.getElementById('cfg-client-email').value.trim();
   var key   = document.getElementById('cfg-private-key').value.trim();
- 
+
   if (!name || !sid || !email || !key) {
     showToast('⚠ Remplis tous les champs', true); return;
   }
@@ -436,23 +436,23 @@ function saveConfig() {
   document.getElementById('setup-screen').style.display = 'none';
   startApp();
 }
- 
+
 function startApp() {
   document.getElementById('main-app').style.display = '';
   document.getElementById('header-pilot-name').textContent = CONFIG.pilotName || '—';
- 
+
   // Default values
   var today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
   document.getElementById('f-pilots').value = CONFIG.pilotName || '';
   document.getElementById('f-from').value = CONFIG.homeBase || '';
   document.getElementById('f-to').value = CONFIG.homeBase || '';
- 
+
   renderAircraftSelect();
   renderFleet();
   getGPS();
 }
- 
+
 // ── SETTINGS ─────────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('s-pilot-name').value = CONFIG.pilotName || '';
@@ -475,7 +475,7 @@ function resetApp() {
   localStorage.clear();
   location.reload();
 }
- 
+
 // ── FLEET ─────────────────────────────────────────────────────────
 function loadFleet() {
   try { var s = localStorage.getItem('cvol_fleet'); return s ? JSON.parse(s) : {}; }
@@ -483,7 +483,7 @@ function loadFleet() {
 }
 function saveFleet() { try { localStorage.setItem('cvol_fleet', JSON.stringify(fleet)); } catch(e) {} }
 var fleet = loadFleet();
- 
+
 // ── SUN CALC ─────────────────────────────────────────────────────
 function toRad(d){return d*Math.PI/180;}function toDeg(r){return r*180/Math.PI;}
 function calcSunTimes(lat,lon,dateStr){
@@ -501,9 +501,9 @@ function calcSunTimes(lat,lon,dateStr){
   return{rise:toUTCMin(Jt-W/360),set:toUTCMin(Jt+W/360)};
 }
 function minsToHHMM(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
- 
+
 var gpsLat=null,gpsLon=null,sunRiseMin=null,sunSetMin=null,nightStartMin=null,nightEndMin=null;
- 
+
 function updateSunDisplay(){
   var date=document.getElementById('f-date').value;
   if(!gpsLat||!date)return;
@@ -518,14 +518,14 @@ function updateSunDisplay(){
   document.getElementById('night-end').textContent='→ '+minsToHHMM(nightEndMin);
   updateDayNight();
 }
- 
+
 function calcDayNightMinutes(offMin,onMin,nightStart,nightEnd){
   var total=onMin-offMin;if(total<0)total+=1440;if(total===0)return{day:0,night:0};
   var nightMins=0;
   for(var i=0;i<total;i++){var t=(offMin+i)%1440;if(nightStart>nightEnd?(t>=nightStart||t<nightEnd):(t>=nightStart&&t<nightEnd))nightMins++;}
   return{night:nightMins,day:total-nightMins};
 }
- 
+
 function updateDayNight(){
   if(!timeOff||!timeOn){document.getElementById('dn-wrap').style.display='none';document.getElementById('dn-no-gps').style.display='';return;}
   if(nightStartMin===null){document.getElementById('dn-no-gps').style.display='';document.getElementById('dn-wrap').style.display='none';return;}
@@ -540,7 +540,7 @@ function updateDayNight(){
   document.getElementById('dn-night-val').textContent=minsToHHMM(r.night);
   window._dayMin=r.day;window._nightMin=r.night;
 }
- 
+
 function getGPS(){
   var dot=document.getElementById('gps-dot'),txt=document.getElementById('gps-text');
   dot.className='gps-dot loading';txt.textContent='Localisation en cours...';
@@ -552,7 +552,7 @@ function getGPS(){
   );
 }
 function onDateChange(){updateSunDisplay();}
- 
+
 // ── CLOCK ─────────────────────────────────────────────────────────
 var timeOff='',timeOn='';
 function stampClass(){return currentType==='plane'?'stamped-plane':currentType==='sim'?'stamped-sim':'stamped';}
@@ -585,7 +585,7 @@ function calcDuration(){
   var dur=String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
   document.getElementById('duration-display').textContent=dur;return dur;
 }
- 
+
 // ── TYPE ──────────────────────────────────────────────────────────
 var currentType='heli';
 function setType(t){
@@ -598,7 +598,7 @@ function setType(t){
   if(timeOn)document.getElementById('stamp-on').className='clock-stamp '+stampClass();
   renderAircraftSelect();
 }
- 
+
 // ── AIRCRAFT ──────────────────────────────────────────────────────
 function renderAircraftSelect(){
   var sel=document.getElementById('f-aircraft'),prev=sel.value;sel.innerHTML='';
@@ -613,13 +613,13 @@ function onAircraftChange(){
   if(fleet[reg]){badge.textContent=fleet[reg].type;badge.className='aircraft-type-badge '+fleet[reg].cat;}
   else{badge.textContent='—';badge.className='aircraft-type-badge';}
 }
- 
+
 // ── TABS ──────────────────────────────────────────────────────────
 function switchTab(t){
   ['form','history','fleet'].forEach(function(id){document.getElementById('tab-'+id).style.display=id===t?'':'none';});
   document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',['form','history','fleet'][i]===t);});
 }
- 
+
 // ── MODAL aéronef ─────────────────────────────────────────────────
 function openModal(){document.getElementById('modal').classList.add('show');}
 function closeModal(){document.getElementById('modal').classList.remove('show');document.getElementById('m-reg').value='';document.getElementById('m-type').value='';}
@@ -637,7 +637,7 @@ function renderFleet(){
   document.getElementById('fleet-list').innerHTML=html||'<div style="color:var(--muted);font-family:var(--font-mono);font-size:12px;padding:12px;">Aucun aéronef.</div>';
 }
 function deleteAircraft(reg){if(!confirm('Supprimer '+reg+' ?'))return;delete fleet[reg];saveFleet();renderAircraftSelect();renderFleet();showToast('✓ '+reg+' supprimé');}
- 
+
 // ── DELETE MODAL ──────────────────────────────────────────────────
 var pendingDeleteIdx=null;
 function openDeleteModal(idx){
@@ -672,7 +672,7 @@ async function confirmDelete(){
   }catch(e){showToast('✗ '+e.message,true);}
   finally{setLoading(false);}
 }
- 
+
 // ── AUTH ──────────────────────────────────────────────────────────
 var accessToken=null,tokenExpiry=0;
 function b64u(s){return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
@@ -682,7 +682,16 @@ async function getToken(){
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
   var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
-  var pem=CONFIG.privateKey.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  // Normaliser la clé privée : remplacer les \n littéraux et les vrais sauts de ligne
+  var rawKey = CONFIG.privateKey
+    .replace(/\\n/g, '\n')        // \n littéral -> vrai saut de ligne
+    .replace(/\r/g, '');            // supprimer les \r
+  var pem = rawKey
+    .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+    .replace(/-----END PRIVATE KEY-----/g, '')
+    .replace(/\n/g, '')
+    .replace(/\s/g, '')
+    .trim();
   var der=Uint8Array.from(atob(pem),function(c){return c.charCodeAt(0);});
   var key=await crypto.subtle.importKey('pkcs8',der,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
   var sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(hdr+'.'+clm));
@@ -691,11 +700,11 @@ async function getToken(){
   var d=await r.json();if(!d.access_token)throw new Error(JSON.stringify(d));
   accessToken=d.access_token;tokenExpiry=Date.now()+(d.expires_in-60)*1000;return accessToken;
 }
- 
+
 // ── SUBMIT ────────────────────────────────────────────────────────
 var sessionFlights=[],sessionMinutes=0;
 var SHEET_MAP={heli:'Hélicoptère',plane:'Avion',sim:'Simulateur'};
- 
+
 async function submitFlight(){
   var date=document.getElementById('f-date').value,ac=document.getElementById('f-aircraft').value;
   var from=document.getElementById('f-from').value.trim().toUpperCase(),to=document.getElementById('f-to').value.trim().toUpperCase();
@@ -743,7 +752,7 @@ async function submitFlight(){
   }catch(e){showToast('✗ '+e.message,true);}
   finally{setLoading(false);}
 }
- 
+
 function resetForm(){
   timeOff='';timeOn='';window._dayMin=undefined;window._nightMin=undefined;
   ['off','on'].forEach(function(w){document.getElementById('stamp-'+w).textContent='--:--';document.getElementById('stamp-'+w).className='clock-stamp';closeEditor(w);});
@@ -756,13 +765,13 @@ function resetForm(){
   document.getElementById('dn-wrap').style.display='none';
   document.getElementById('dn-no-gps').style.display='';
 }
- 
+
 function updateStats(){
   document.getElementById('stat-flights').textContent=sessionFlights.length;
   document.getElementById('stat-hours').textContent=String(Math.floor(sessionMinutes/60)).padStart(2,'0')+':'+String(sessionMinutes%60).padStart(2,'0');
   document.getElementById('stat-status').textContent='SYNC ✓';
 }
- 
+
 function updateHistory(){
   var list=document.getElementById('history-list');
   var labels={heli:'🚁 Hélico',plane:'✈ Avion',sim:'🖥️ Sim'};
@@ -777,7 +786,7 @@ function updateHistory(){
       +'</div>';
   }).join('');
 }
- 
+
 function setLoading(on,msg){document.getElementById('loading').classList.toggle('show',on);if(msg)document.getElementById('loading-text').textContent=msg;document.getElementById('btn-submit').disabled=on;}
 function showToast(msg,err){
   var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'');
