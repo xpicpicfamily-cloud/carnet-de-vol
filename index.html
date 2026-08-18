@@ -321,7 +321,7 @@
       <div class="tab" onclick="switchTab('history')">Historique</div>
       <div class="tab" onclick="switchTab('fleet')">Flotte</div>
       <div class="tab" onclick="switchTab('qualifs')" id="tab-btn-qualifs">Qualifs</div>
-      <div class="tab" onclick="switchTab('stats')">Stats</div>
+      <div class="tab" onclick="switchTab('stats');document.getElementById('debug-box').style.display='block';document.getElementById('debug-box').textContent='TAB CLICKED';">Stats</div>
     </div>
 
     <div class="content" id="tab-form">
