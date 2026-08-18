@@ -1153,7 +1153,7 @@ function saveQualifs(q) {
 }
 
 function switchTab(t) {
-  ['form','history','fleet','stats','qualifs'].forEach(function(id){
+  ['form','history','fleet','qualifs','stats'].forEach(function(id){
     var el = document.getElementById('tab-'+id);
     if (el) el.style.display = id===t?'':'none';
   });
