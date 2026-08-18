@@ -321,7 +321,7 @@
       <div class="tab" onclick="switchTab('history')">Histo</div>
       <div class="tab" onclick="switchTab('fleet')">Flotte</div>
       <div class="tab" onclick="switchTab('qualifs')" id="tab-btn-qualifs">Qualifs</div>
-      <div class="tab" onclick="alert('Stats clicked!');switchTab('stats');">Stats</div>
+      <div class="tab" onclick="switchTab('stats')">Stats</div>
     </div>
 
     <div class="content" id="tab-form">
@@ -1155,7 +1155,7 @@ function saveQualifs(q) {
 function switchTab(t) {
   ['form','history','fleet','qualifs','stats'].forEach(function(id){
     var el = document.getElementById('tab-'+id);
-    if (el) el.style.display = id===t?'':'none';
+    if (el) el.style.display = id===t ? 'block' : 'none';
   });
   document.querySelectorAll('.tab').forEach(function(el,i){
     el.classList.toggle('active', ['form','history','fleet','qualifs','stats'][i]===t);
