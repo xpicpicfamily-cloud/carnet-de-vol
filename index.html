@@ -253,9 +253,9 @@
   .pie-item{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;color:var(--text);}
   .pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 </style>
+<script src="airports.js"></script>
 </head>
 <body>
-<script src="airports.js"></script>
 <div class="app" id="app">
 
   <!-- ── SETUP SCREEN ── -->
@@ -1043,6 +1043,7 @@ var AC_IDX = null;
 function buildIndex() {
   if (AC_IDX) return;
   AC_IDX = {};
+  if (!AIRPORTS || !AIRPORTS.length) return;
   AIRPORTS.forEach(function(a,i) {
     // Format: [icao, name, lat, lon]
     var k = a[0].toUpperCase();
