@@ -440,6 +440,7 @@
     <div class="content" id="tab-stats" style="display:none;">
       <!-- Sélecteur d'année -->
       <div class="section-title">Statistiques</div>
+      <div id="debug-box" style="display:none;background:#1a0000;border:1px solid #ff4444;border-radius:8px;padding:10px;margin-bottom:12px;font-family:monospace;font-size:10px;color:#ff6666;white-space:pre-wrap;max-height:150px;overflow-y:auto;"></div>
       <div class="stats-year-sel" id="stats-year-sel"></div>
 
       <!-- KPI cards -->
@@ -1424,24 +1425,38 @@ function checkQualifsBadge() {
 var statsYear = new Date().getFullYear();
 
 async function loadStatsData() {
-  // Lire depuis Google Sheets
+  function dbg(msg) {
+    var box = document.getElementById('debug-box');
+    if (box) { box.style.display='block'; box.textContent += msg + '\n'; }
+  }
   try {
+    dbg('Chargement token...');
     var token = await getToken();
+    dbg('Token OK');
     var sheets = ['Hélicoptère','Avion','Simulateur'];
     var allRows = [];
     for (var s of sheets) {
       var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+
                 '/values/'+encodeURIComponent(s)+'!A3:R?majorDimension=ROWS';
+      dbg('Lecture ' + s + '...');
       var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
       var data = await resp.json();
+      if (data.error) { dbg('ERREUR ' + s + ': ' + JSON.stringify(data.error)); continue; }
       if (data.values) {
+        var count = 0;
         data.values.forEach(function(row) {
-          if (row[0]) allRows.push({cat:s, row:row});
+          if (row[0]) { allRows.push({cat:s, row:row}); count++; }
         });
+        dbg(s + ': ' + count + ' lignes');
+      } else {
+        dbg(s + ': vide');
       }
     }
+    dbg('Total: ' + allRows.length + ' vols');
     return allRows;
   } catch(e) {
+    var box = document.getElementById('debug-box');
+    if (box) { box.style.display='block'; box.textContent += 'ERREUR: ' + e.message + '\n'; }
     showToast('✗ Erreur chargement stats: '+e.message, true);
     return [];
   }
