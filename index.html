@@ -400,6 +400,19 @@
       <div id="fleet-list"></div>
       <button class="btn-submit" style="margin-top:8px;" onclick="openModal()">+ Ajouter un aéronef</button>
     </div>
+
+    <div class="content" id="tab-qualifs" style="display:none;">
+      <div id="notif-banner" style="display:none;background:rgba(255,107,53,0.1);border:1px solid rgba(255,107,53,0.3);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-family:var(--font-mono);font-size:11px;color:#ff6b35;">Activez les notifications pour recevoir les alertes.</div>
+      <div class="qual-section-title">Licences et Qualifications</div>
+      <div id="qualifs-licences"></div>
+      <button class="btn-add-qual" onclick="openQualModal('licence')">+ Ajouter une licence / qualification</button>
+      <div class="qual-section-title">Visites Medicales</div>
+      <div id="qualifs-medicals"></div>
+      <button class="btn-add-qual" onclick="openQualModal('medical')">+ Ajouter une visite medicale</button>
+      <div class="qual-section-title">Recences</div>
+      <div id="qualifs-recences"></div>
+      <button class="btn-add-qual" onclick="openQualModal('recence')">+ Ajouter une recence</button>
+    </div>
   </div>
 </div>
 
@@ -479,6 +492,14 @@
       <div class="field"><label>Date d expiration</label><input type="date" id="q-expires" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;"></div>
       <div class="field"><label>Autorité</label><input type="text" id="q-authority" placeholder="DGAC / EASA" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
       <div class="field"><label>Notes</label><input type="text" id="q-notes" placeholder="Optionnel" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
+    </div>
+    <!-- Zone photo OCR -->
+    <div style="margin-bottom:12px;">
+      <button onclick="triggerQualPhoto()" style="width:100%;padding:10px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--accent);font-family:var(--font-mono);font-size:12px;cursor:pointer;">
+        Photo licence / medicale
+      </button>
+      <input type="file" id="qual-photo-input" accept="image/*" capture="environment" style="display:none" onchange="processQualPhoto(this)">
+      <div id="qual-ocr-status" style="display:none;margin-top:6px;padding:8px;background:var(--panel2);border-radius:6px;font-family:var(--font-mono);font-size:11px;color:var(--accent);text-align:center;"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeQualModal()">Annuler</button>
@@ -1166,6 +1187,104 @@ function detectNearestAndFill(fieldId) {
       }
     }
   }, null, {timeout:5000, maximumAge:30000});
+}
+
+
+// ── OCR PHOTO QUALIFS ─────────────────────────────────────────────
+function triggerQualPhoto() {
+  document.getElementById('qual-photo-input').click();
+}
+
+async function processQualPhoto(input) {
+  if (!input.files || !input.files[0]) return;
+  var file = input.files[0];
+  var status = document.getElementById('qual-ocr-status');
+  status.style.display = 'block';
+  status.textContent = '🔍 Analyse en cours...';
+
+  try {
+    // Convertir en base64
+    var b64 = await new Promise(function(res, rej) {
+      var r = new FileReader();
+      r.onload = function() { res(r.result.split(',')[1]); };
+      r.onerror = function() { rej(new Error('Lecture impossible')); };
+      r.readAsDataURL(file);
+    });
+
+    // Appel API Claude
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 500,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: { type: 'base64', media_type: file.type || 'image/jpeg', data: b64 }
+            },
+            {
+              type: 'text',
+              text: 'Analyse ce document (licence pilote EASA/DGAC ou certificat medical). Reponds UNIQUEMENT avec un JSON sans markdown: {"type":"ex ATPL(H) ou Medical Cl.1","ref":"numero reference ou vide","issued":"YYYY-MM-DD ou vide","expires":"YYYY-MM-DD ou vide","authority":"DGAC ou EASA ou vide"}. Dates au format YYYY-MM-DD uniquement.'
+            }
+          ]
+        }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('API erreur ' + resp.status);
+    var data = await resp.json();
+    var txt = data.content && data.content[0] ? data.content[0].text : '';
+
+    // Parser le JSON
+    var parsed = null;
+    try {
+      // Nettoyer le JSON si besoin
+      var clean = txt.replace(/```json|```/g, '').trim();
+      parsed = JSON.parse(clean);
+    } catch(e) {
+      // Chercher un JSON dans le texte
+      var m = txt.match(/\{[^}]+\}/);
+      if (m) parsed = JSON.parse(m[0]);
+    }
+
+    if (parsed) {
+      if (parsed.type) {
+        // Chercher dans le select si le type existe, sinon garder tel quel
+        var sel = document.getElementById('q-type');
+        var found = false;
+        for (var i=0; i<sel.options.length; i++) {
+          if (sel.options[i].value.toLowerCase() === parsed.type.toLowerCase()) {
+            sel.value = sel.options[i].value;
+            found = true;
+            break;
+          }
+        }
+        if (!found) sel.value = sel.options[0].value;
+      }
+      if (parsed.ref)       document.getElementById('q-ref').value       = parsed.ref;
+      if (parsed.issued)    document.getElementById('q-issued').value    = parsed.issued;
+      if (parsed.expires)   document.getElementById('q-expires').value   = parsed.expires;
+      if (parsed.authority) document.getElementById('q-authority').value = parsed.authority;
+
+      status.style.color = 'var(--green)';
+      status.textContent = 'OK — Verifie et corrige si besoin';
+      showToast('Document analyse !');
+    } else {
+      throw new Error('Impossible d extraire les donnees');
+    }
+
+  } catch(e) {
+    status.style.color = '#ff4444';
+    status.textContent = 'Erreur: ' + e.message + ' — Remplis manuellement';
+  } finally {
+    input.value = '';
+  }
 }
 
 </script>
