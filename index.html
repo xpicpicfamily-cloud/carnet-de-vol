@@ -1446,10 +1446,7 @@ async function loadStatsData() {
       var range = encodeURIComponent(s + '!A3:R');
       var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+
                 '/values/'+range+'?majorDimension=ROWS';
-      dbg('URL: ' + url);
-      showToast('Lecture: ' + s, false);
       var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
-      dbg('Status: ' + resp.status);
       var data = await resp.json();
       if (data.error) { dbg('ERREUR ' + s + ': ' + JSON.stringify(data.error)); continue; }
       if (data.values) {
@@ -1462,10 +1459,6 @@ async function loadStatsData() {
         dbg(s + ': vide');
       }
     }
-    var total = allRows.length;
-    showToast('Stats: H=' + allRows.filter(function(r){return r.cat==='Hélicoptère';}).length + 
-              ' A=' + allRows.filter(function(r){return r.cat==='Avion';}).length +
-              ' S=' + allRows.filter(function(r){return r.cat==='Simulateur';}).length, total===0);
     return allRows;
   } catch(e) {
     var box = document.getElementById('debug-box');
@@ -1477,12 +1470,18 @@ async function loadStatsData() {
 
 function parseRowDate(dateStr) {
   if (!dateStr) return null;
+  var s = String(dateStr).trim();
   // Format DD.MM.YYYY
-  var m = String(dateStr).match(/(\d{2})\.(\d{2})\.(\d{4})/);
-  if (m) return new Date(m[3]+'-'+m[2]+'-'+m[1]);
+  var m = s.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+  if (m) return new Date(m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'));
+  // Format DD/MM/YYYY
+  m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (m) return new Date(m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'));
   // Format YYYY-MM-DD
-  m = String(dateStr).match(/(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return new Date(dateStr);
+  m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return new Date(s);
+  // Objet Date retourné par Sheets
+  if (dateStr instanceof Date) return dateStr;
   return null;
 }
 
