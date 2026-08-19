@@ -387,6 +387,7 @@
       <button class="btn-submit" id="btn-submit" onclick="submitFlight()">⊕ ENREGISTRER LE VOL</button>
       <div style="text-align:center;margin-top:12px;">
         <span class="settings-link" onclick="openSettings()">⚙ Paramètres</span>
+      <span class="settings-link" onclick="testToken()" style="margin-left:16px;color:var(--green);">🔑 Test token</span>
       </div>
     </div>
 
@@ -801,7 +802,7 @@ async function getToken(){
   if(accessToken&&Date.now()<tokenExpiry)return accessToken;
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
-  var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
+  var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now-60}));
   var rawKey = CONFIG.privateKey || '';
   rawKey = rawKey.replace(/\\n/g, '\n');
   rawKey = rawKey.replace(/\r/g, '');
@@ -817,7 +818,11 @@ async function getToken(){
   var sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(hdr+'.'+clm));
   var jwt=hdr+'.'+clm+'.'+b64ua(new Uint8Array(sig));
   var r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion='+jwt});
-  var d=await r.json();if(!d.access_token)throw new Error(JSON.stringify(d));
+  var d=await r.json();
+  if(!d.access_token){
+    var msg = d.error_description || d.error || JSON.stringify(d);
+    throw new Error('Auth: '+msg+' | email='+String(CONFIG.clientEmail).substring(0,40));
+  }
   accessToken=d.access_token;tokenExpiry=Date.now()+(d.expires_in-60)*1000;return accessToken;
 }
 
@@ -1188,6 +1193,20 @@ function detectNearestAndFill(fieldId) {
       }
     }
   }, null, {timeout:5000, maximumAge:30000});
+}
+
+
+async function testToken() {
+  showToast('Test token...', false);
+  try {
+    var token = await getToken();
+    showToast('Token OK: '+token.substring(0,20)+'...', false);
+  } catch(e) {
+    showToast('ERREUR: '+e.message, true);
+    // Afficher plus de détails
+    alert('Erreur token:\n'+e.message+'\n\nClé (50 premiers chars):\n'+
+      (CONFIG.privateKey||'').substring(0,50));
+  }
 }
 
 </script>
