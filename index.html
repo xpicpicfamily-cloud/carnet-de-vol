@@ -1487,11 +1487,8 @@ async function renderStats() {
   var box = document.getElementById('debug-box');
   if (box) { box.style.display='block'; box.textContent = 'renderStats() démarré...\n'; }
   var allRows = await loadStatsData();
-  if (box) box.textContent += 'Rows reçus: ' + allRows.length + '\n';
-  if (!allRows.length) {
-    if (box) box.textContent += 'Aucune donnée — vérifier config\n';
-    return;
-  }
+  alert('Stats: ' + allRows.length + ' vols chargés');
+  if (!allRows.length) return;
 
   // Détecter les années disponibles
   var years = {};
