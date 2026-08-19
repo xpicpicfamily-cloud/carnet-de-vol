@@ -321,7 +321,6 @@
       <div class="tab" onclick="switchTab('history')">Histo</div>
       <div class="tab" onclick="switchTab('fleet')">Flotte</div>
       <div class="tab" onclick="switchTab('qualifs')" id="tab-btn-qualifs">Qualifs</div>
-      <div class="tab" onclick="switchTab('stats')">Stats</div>
     </div>
 
     <div class="content" id="tab-form">
@@ -437,66 +436,6 @@
       <div id="fleet-list"></div>
       <button class="btn-submit" style="margin-top:8px;" onclick="openModal()">+ Ajouter un aéronef</button>
 
-    <div class="content" id="tab-stats" style="display:none;">
-      <!-- Sélecteur d'année -->
-      <div class="section-title">Statistiques</div>
-      <div id="debug-box" style="display:none;background:#1a0000;border:1px solid #ff4444;border-radius:8px;padding:10px;margin-bottom:12px;font-family:monospace;font-size:10px;color:#ff6666;white-space:pre-wrap;max-height:150px;overflow-y:auto;"></div>
-      <div class="stats-year-sel" id="stats-year-sel"></div>
-
-      <!-- KPI cards -->
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-card-val" id="s-total-h">--</div><div class="stat-card-lbl">Heures vol</div></div>
-        <div class="stat-card"><div class="stat-card-val orange" id="s-total-v">--</div><div class="stat-card-lbl">Vols</div></div>
-        <div class="stat-card"><div class="stat-card-val green" id="s-jours">--</div><div class="stat-card-lbl">Jours volés</div></div>
-        <div class="stat-card"><div class="stat-card-val purple" id="s-nuit">--</div><div class="stat-card-lbl">Heures nuit</div></div>
-      </div>
-
-      <!-- Heatmap jours volés -->
-      <div class="chart-box">
-        <div class="chart-box-title">Jours volés dans l'année</div>
-        <div class="hm-months" id="hm-months"></div>
-        <div class="heatmap-wrap"><div class="heatmap" id="heatmap"></div></div>
-        <div class="hm-legend">
-          <span>Moins</span>
-          <div class="hm-legend-cell" style="background:var(--panel2)"></div>
-          <div class="hm-legend-cell hm-cell hm-1"></div>
-          <div class="hm-legend-cell hm-cell hm-2"></div>
-          <div class="hm-legend-cell hm-cell hm-3"></div>
-          <div class="hm-legend-cell hm-cell hm-4"></div>
-          <span>Plus</span>
-        </div>
-      </div>
-
-      <!-- Heures par mois -->
-      <div class="chart-box">
-        <div class="chart-box-title">Heures par mois</div>
-        <div id="chart-months"></div>
-      </div>
-
-      <!-- Répartition par type -->
-      <div class="chart-box">
-        <div class="chart-box-title">Heures par type d'aéronef</div>
-        <div id="chart-types"></div>
-      </div>
-
-      <!-- Jour vs Nuit -->
-      <div class="chart-box">
-        <div class="chart-box-title">Répartition Jour / Nuit</div>
-        <div class="pie-wrap">
-          <canvas id="pie-canvas" width="120" height="120"></canvas>
-          <div class="pie-legend" id="pie-legend"></div>
-        </div>
-      </div>
-
-      <!-- Heures par rôle -->
-      <div class="chart-box">
-        <div class="chart-box-title">Heures par rôle</div>
-        <div id="chart-roles"></div>
-      </div>
-    </div>
-
-    </div>
-
     <div class="content" id="tab-qualifs" style="display:none;">
       <div class="notif-banner" id="notif-banner">⚠ Activez les notifications pour recevoir les alertes d'expiration.</div>
       
@@ -588,25 +527,26 @@
     <div class="modal-grid">
       <div class="field">
         <label>Type</label>
-        <select id="q-type" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;">
-          <option value="CPL(H)">CPL(H)</option>
-          <option value="ATPL(H)">ATPL(H)</option>
-          <option value="CPL(A)">CPL(A)</option>
-          <option value="ATPL(A)">ATPL(A)</option>
-          <option value="IR(H)">IR(H)</option>
-          <option value="IR(A)">IR(A)</option>
-          <option value="H145">Qualification H145</option>
-          <option value="AW139">Qualification AW139</option>
-          <option value="EC45T2">Qualification EC45T2</option>
-          <option value="H225">Qualification H225</option>
-          <option value="TRI(H)">TRI(H)</option>
-          <option value="TRE(H)">TRE(H)</option>
-          <option value="SFI(H)">SFI(H)</option>
-          <option value="FI(H)">FI(H)</option>
-          <option value="Medical Cl.1">Médical Classe 1</option>
-          <option value="Medical Cl.2">Médical Classe 2</option>
-          <option value="Autre">Autre</option>
-        </select>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <select id="q-type" style="flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;" onchange="checkCustomQual(this)">
+            <option value="ATPL(H)">ATPL(H)</option>
+            <option value="IR(H)">IR(H)</option>
+            <option value="H145">Qualification H145</option>
+            <option value="AW139">Qualification AW139</option>
+            <option value="TRI(H)">TRI(H)</option>
+            <option value="TRE(H)">TRE(H)</option>
+            <option value="Medical Cl.1">Médical Classe 1</option>
+            <option value="Medical Cl.2">Médical Classe 2</option>
+            <option value="SEP(A)">SEP(A)</option>
+            <option value="__add__">+ Ajouter une qualification...</option>
+            <option value="__del__">🗑 Supprimer une qualification...</option>
+          </select>
+        </div>
+        <div id="q-custom-wrap" style="display:none;margin-top:6px;">
+          <input type="text" id="q-custom" placeholder="Nom de la qualification" 
+            style="background:var(--panel2);border:1px solid var(--accent);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;">
+          <button onclick="addCustomQual()" style="margin-top:6px;width:100%;padding:8px;background:var(--accent);border:none;border-radius:6px;color:#000;font-family:var(--font-mono);font-size:12px;font-weight:700;cursor:pointer;">AJOUTER AU MENU ✓</button>
+        </div>
       </div>
       <div class="field">
         <label>Numéro / Référence</label>
@@ -1160,15 +1100,14 @@ function saveQualifs(q) {
 }
 
 function switchTab(t) {
-  ['form','history','fleet','qualifs','stats'].forEach(function(id){
+  ['form','history','fleet','qualifs'].forEach(function(id){
     var el = document.getElementById('tab-'+id);
     if (el) el.style.display = id===t ? 'block' : 'none';
   });
   document.querySelectorAll('.tab').forEach(function(el,i){
-    el.classList.toggle('active', ['form','history','fleet','qualifs','stats'][i]===t);
+    el.classList.toggle('active', ['form','history','fleet','qualifs'][i]===t);
   });
   if (t==='qualifs') { renderQualifs(); requestNotifPermission(); }
-  if (t==='stats')   { renderStats(); }
 }
 
 function daysUntil(dateStr) {
@@ -1240,6 +1179,8 @@ function openQualModal(cat) {
   document.getElementById('q-type').value = cat==='medical' ? 'Medical Cl.1' : 'CPL(H)';
   ['q-ref','q-notes','q-authority'].forEach(function(id){document.getElementById(id).value='';});
   ['q-issued','q-expires'].forEach(function(id){document.getElementById(id).value='';});
+  buildQualSelect();
+  document.getElementById('q-custom-wrap').style.display='none';
   document.getElementById('ocr-result').classList.remove('show');
   document.getElementById('ocr-spinner').classList.remove('show');
   document.getElementById('modal-qual').classList.add('show');
@@ -1258,6 +1199,8 @@ function openQualModalEdit(idx) {
   document.getElementById('q-expires').value = q.expires||'';
   document.getElementById('q-authority').value = q.authority||'';
   document.getElementById('q-notes').value = q.notes||'';
+  buildQualSelect();
+  document.getElementById('q-custom-wrap').style.display='none';
   document.getElementById('ocr-result').classList.remove('show');
   document.getElementById('ocr-spinner').classList.remove('show');
   document.getElementById('modal-qual').classList.add('show');
@@ -1492,6 +1435,7 @@ function parseRowDate(dateStr) {
 }
 
 async function renderStats() {
+  showToast('renderStats START', false);
   // Réinitialiser le cache token pour forcer un nouveau token
   accessToken = null; tokenExpiry = 0;
   // Afficher debug box immédiatement
@@ -1761,6 +1705,68 @@ function detectNearestAndFill(fieldId) {
       }
     }
   }, null, {timeout:5000, maximumAge:30000});
+}
+
+
+// ── QUALIFICATIONS CUSTOM ─────────────────────────────────────────
+var DEFAULT_QUALS = ['ATPL(H)','IR(H)','H145','AW139','TRI(H)','TRE(H)','Medical Cl.1','Medical Cl.2','SEP(A)'];
+
+function loadCustomQuals() {
+  try { return JSON.parse(localStorage.getItem('cvol_custom_quals')||'[]'); } catch(e) { return []; }
+}
+function saveCustomQuals(q) {
+  try { localStorage.setItem('cvol_custom_quals', JSON.stringify(q)); } catch(e) {}
+}
+
+function buildQualSelect() {
+  var sel = document.getElementById('q-type');
+  if (!sel) return;
+  var custom = loadCustomQuals();
+  var allQuals = DEFAULT_QUALS.concat(custom);
+  var current = sel.value;
+  sel.innerHTML = allQuals.map(function(q) {
+    return '<option value="'+q+'">'+q+'</option>';
+  }).join('') +
+  '<option value="__add__">+ Ajouter une qualification...</option>' +
+  (custom.length ? '<option value="__del__">🗑 Supprimer une qualification...</option>' : '');
+  if (current && allQuals.indexOf(current) >= 0) sel.value = current;
+}
+
+function checkCustomQual(sel) {
+  var wrap = document.getElementById('q-custom-wrap');
+  if (sel.value === '__add__') {
+    wrap.style.display = 'block';
+    document.getElementById('q-custom').value = '';
+    document.getElementById('q-custom').focus();
+  } else if (sel.value === '__del__') {
+    var custom = loadCustomQuals();
+    if (!custom.length) { showToast('Aucune qualification personnalisée', true); buildQualSelect(); return; }
+    var name = prompt('Quelle qualification supprimer ?\n' + custom.join(', '));
+    if (name && custom.indexOf(name) >= 0) {
+      custom.splice(custom.indexOf(name), 1);
+      saveCustomQuals(custom);
+      buildQualSelect();
+      showToast('✓ ' + name + ' supprimée');
+    } else {
+      buildQualSelect();
+    }
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
+function addCustomQual() {
+  var name = document.getElementById('q-custom').value.trim();
+  if (!name) { showToast('⚠ Entrez un nom', true); return; }
+  var custom = loadCustomQuals();
+  var all = DEFAULT_QUALS.concat(custom);
+  if (all.indexOf(name) >= 0) { showToast('⚠ Déjà dans la liste', true); return; }
+  custom.push(name);
+  saveCustomQuals(custom);
+  buildQualSelect();
+  document.getElementById('q-type').value = name;
+  document.getElementById('q-custom-wrap').style.display = 'none';
+  showToast('✓ ' + name + ' ajoutée');
 }
 
 </script>
