@@ -1443,8 +1443,9 @@ async function loadStatsData() {
     var sheets = ['Hélicoptère','Avion','Simulateur'];
     var allRows = [];
     for (var s of sheets) {
+      var range = encodeURIComponent(s + '!A3:R');
       var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+
-                '/values/'+encodeURIComponent(s)+'!A3:R?majorDimension=ROWS';
+                '/values/'+range+'?majorDimension=ROWS';
       dbg('Lecture ' + s + '...');
       var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
       var data = await resp.json();
@@ -1486,9 +1487,17 @@ async function renderStats() {
   // Afficher debug box immédiatement
   var box = document.getElementById('debug-box');
   if (box) { box.style.display='block'; box.textContent = 'renderStats() démarré...\n'; }
-  var allRows = await loadStatsData();
-  alert('Stats: ' + allRows.length + ' vols chargés');
-  if (!allRows.length) return;
+  var allRows = [];
+  try {
+    allRows = await loadStatsData();
+  } catch(e) {
+    showToast('Stats erreur: ' + e.message, true);
+    return;
+  }
+  if (!allRows.length) {
+    showToast('Stats: aucune donnée', true);
+    return;
+  }
 
   // Détecter les années disponibles
   var years = {};
