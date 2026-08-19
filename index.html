@@ -802,7 +802,16 @@ async function getToken(){
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
   var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
-  var pem=CONFIG.privateKey.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
+  var rawKey = CONFIG.privateKey || '';
+  rawKey = rawKey.replace(/\\n/g, '\n');
+  rawKey = rawKey.replace(/\r/g, '');
+  var pem = rawKey
+    .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+    .replace(/-----END PRIVATE KEY-----/g, '')
+    .replace(/[\n\r\s]/g, '')
+    .replace(/[^A-Za-z0-9+\/=]/g, '')
+    .trim();
+  if (!pem) throw new Error('Cle privee invalide');
   var der=Uint8Array.from(atob(pem),function(c){return c.charCodeAt(0);});
   var key=await crypto.subtle.importKey('pkcs8',der,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
   var sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(hdr+'.'+clm));
