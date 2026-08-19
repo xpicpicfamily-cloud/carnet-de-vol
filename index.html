@@ -1446,8 +1446,10 @@ async function loadStatsData() {
       var range = encodeURIComponent(s + '!A3:R');
       var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+
                 '/values/'+range+'?majorDimension=ROWS';
-      dbg('Lecture ' + s + '...');
+      dbg('URL: ' + url);
+      showToast('Lecture: ' + s, false);
       var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
+      dbg('Status: ' + resp.status);
       var data = await resp.json();
       if (data.error) { dbg('ERREUR ' + s + ': ' + JSON.stringify(data.error)); continue; }
       if (data.values) {
