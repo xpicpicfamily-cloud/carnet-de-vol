@@ -1499,22 +1499,24 @@ async function renderStats() {
     return;
   }
 
-  // Détecter les années disponibles
-  var years = {};
-  allRows.forEach(function(r) {
-    var d = parseRowDate(r.row[0]);
-    if (d) years[d.getFullYear()] = true;
-  });
-  var yearList = Object.keys(years).map(Number).sort();
+  try {
+    // Détecter les années disponibles
+    var years = {};
+    allRows.forEach(function(r) {
+      var d = parseRowDate(r.row[0]);
+      if (d) years[d.getFullYear()] = true;
+    });
+    var yearList = Object.keys(years).map(Number).sort();
 
-  // Sélecteur années
-  var sel = document.getElementById('stats-year-sel');
-  sel.innerHTML = ['Tout'].concat(yearList.map(String)).map(function(y) {
-    return '<button class="year-btn'+(String(statsYear)===String(y)||(!yearList.includes(statsYear)&&y==='Tout')?' active':'')+
-           '" onclick="selectYear('+JSON.stringify(y)+', this)">'+y+'</button>';
-  }).join('');
+    // Sélecteur années
+    var sel = document.getElementById('stats-year-sel');
+    sel.innerHTML = ['Tout'].concat(yearList.map(String)).map(function(y) {
+      return '<button class="year-btn'+(String(statsYear)===String(y)||(!yearList.includes(statsYear)&&y==='Tout')?' active':'')+
+             '" onclick="selectYear('+JSON.stringify(y)+', this)">'+y+'</button>';
+    }).join('');
 
-  computeStats(allRows, statsYear);
+    computeStats(allRows, statsYear);
+  } catch(e) { showToast('Stats erreur: '+e.message, true); }
 }
 
 function selectYear(y, btn) {
