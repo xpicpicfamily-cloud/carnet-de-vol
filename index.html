@@ -45,7 +45,7 @@
   .stat-value.orange{color:var(--accent2);}
   .stat-value.green{color:var(--green);}
   .tabs{display:flex;border-bottom:1px solid var(--border);background:var(--panel);}
-  .tab{flex:1;padding:10px 2px;text-align:center;font-size:9px;font-weight:700;letter-spacing:0.01em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase;}
+  .tab{flex:1;padding:11px 4px;text-align:center;font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;text-transform:uppercase;}
   .tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,212,255,0.05);}
   .content{flex:1;padding:16px 20px;overflow-y:auto;}
   .section-title{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
@@ -167,17 +167,7 @@
   .fleet-card .del-btn{flex-shrink:0;width:32px;height:32px;background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.35);border-radius:6px;color:#ff6666;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .settings-link{font-family:var(--font-mono);font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:inline-block;margin-top:8px;}
   .settings-link:hover{color:var(--accent);}
-
-  /* ── AUTOCOMPLETE TERRAINS ── */
-  .ac-wrap{position:relative;}
-  .ac-drop{position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid var(--accent);border-top:none;border-radius:0 0 6px 6px;z-index:100;max-height:200px;overflow-y:auto;display:none;}
-  .ac-drop.open{display:block;}
-  .ac-item{padding:8px 12px;cursor:pointer;font-family:var(--font-mono);font-size:12px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;}
-  .ac-item:hover,.ac-item.selected{background:rgba(0,212,255,0.1);}
-  .ac-icao{color:var(--accent);font-weight:700;min-width:50px;}
-  .ac-name{color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-
-  /* ── QUALIFS ── */
+/* ── QUALIFS ── */
   .qual-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
   .qual-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
   .qual-ok::before{background:var(--green);}
@@ -217,41 +207,15 @@
   .ocr-spinner.show{display:block;}
 
   /* ── STATS ── */
-  .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-  .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
-  .stat-card-val{font-family:var(--font-mono);font-size:22px;color:var(--accent);font-weight:700;}
-  .stat-card-val.orange{color:var(--accent2);}
-  .stat-card-val.green{color:var(--green);}
-  .stat-card-val.purple{color:var(--sim);}
-  .stat-card-lbl{font-family:var(--font-mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;}
-  .chart-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
-  .chart-box-title{font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
-  .chart-canvas{width:100%;height:180px;display:block;}
-  .chart-canvas-tall{width:100%;height:220px;display:block;}
-  .stats-year-sel{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-  .year-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:var(--panel2);color:var(--muted);font-family:var(--font-mono);font-size:11px;cursor:pointer;transition:all 0.2s;}
-  .year-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.08);}
-  /* Heatmap jours volés */
-  .heatmap-wrap{overflow-x:auto;padding-bottom:4px;}
-  .heatmap{display:grid;grid-template-rows:repeat(7,12px);grid-auto-flow:column;gap:2px;min-width:max-content;}
-  .hm-cell{width:12px;height:12px;border-radius:2px;background:var(--panel2);}
-  .hm-cell.hm-1{background:rgba(0,212,255,0.3);}
-  .hm-cell.hm-2{background:rgba(0,212,255,0.55);}
-  .hm-cell.hm-3{background:rgba(0,212,255,0.8);}
-  .hm-cell.hm-4{background:var(--accent);}
-  .hm-months{display:flex;gap:0;font-family:var(--font-mono);font-size:9px;color:var(--muted);margin-bottom:4px;min-width:max-content;}
-  .hm-month-lbl{width:52px;flex-shrink:0;}
-  .hm-legend{display:flex;align-items:center;gap:6px;margin-top:6px;font-family:var(--font-mono);font-size:9px;color:var(--muted);}
-  .hm-legend-cell{width:10px;height:10px;border-radius:2px;}
-  .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-  .bar-lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted);width:55px;text-align:right;flex-shrink:0;}
-  .bar-track{flex:1;background:var(--panel2);border-radius:4px;height:16px;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:4px;transition:width 0.4s;}
-  .bar-val{font-family:var(--font-mono);font-size:10px;color:var(--text);width:45px;flex-shrink:0;}
-  .pie-wrap{display:flex;align-items:center;gap:16px;}
-  .pie-legend{display:flex;flex-direction:column;gap:6px;}
-  .pie-item{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;color:var(--text);}
-  .pie-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  
+
+  .ac-wrap{position:relative;}
+  .ac-drop{position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid var(--accent);border-top:none;border-radius:0 0 6px 6px;z-index:100;max-height:200px;overflow-y:auto;display:none;}
+  .ac-drop.open{display:block;}
+  .ac-item{padding:8px 12px;cursor:pointer;font-family:var(--font-mono);font-size:12px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;}
+  .ac-item:hover,.ac-item.selected{background:rgba(0,212,255,0.1);}
+  .ac-icao{color:var(--accent);font-weight:700;min-width:50px;}
+  .ac-name{color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 </style>
 <script src="airports.js"></script>
 </head>
@@ -395,7 +359,7 @@
       <div class="form-grid">
         <div class="field"><label>Départ</label>
   <div class="ac-wrap">
-    <input type="text" id="f-from" autocapitalize="characters" autocomplete="off" 
+    <input type="text" id="f-from" autocapitalize="characters" autocomplete="off"
            oninput="acSearch(this,'ac-from')" onkeydown="acKey(event,'ac-from')"
            onfocus="acSearch(this,'ac-from')" placeholder="LFRB ou Brest">
     <div class="ac-drop" id="ac-from"></div>
@@ -435,21 +399,6 @@
       <div class="section-title">Flotte enregistrée</div>
       <div id="fleet-list"></div>
       <button class="btn-submit" style="margin-top:8px;" onclick="openModal()">+ Ajouter un aéronef</button>
-
-    <div class="content" id="tab-qualifs" style="display:none;">
-      <div class="notif-banner" id="notif-banner">⚠ Activez les notifications pour recevoir les alertes d'expiration.</div>
-      
-      <div class="qual-section-title">Licences &amp; Qualifications</div>
-      <div id="qualifs-licences"></div>
-      <button class="btn-add-qual" onclick="openQualModal('licence')">+ Ajouter une licence / qualification</button>
-      
-      <div class="qual-section-title">Visites Médicales</div>
-      <div id="qualifs-medicals"></div>
-      <button class="btn-add-qual" onclick="openQualModal('medical')">+ Ajouter une visite médicale</button>
-
-      <div class="qual-section-title">Récences</div>
-      <div id="qualifs-recences"></div>
-      <button class="btn-add-qual" onclick="openQualModal('recence')">+ Ajouter une récence</button>
     </div>
   </div>
 </div>
@@ -506,68 +455,30 @@
 </div>
 
 
-<!-- Modal ajout qualification -->
+<!-- Modal qualification -->
 <div class="modal-backdrop modal-qual" id="modal-qual">
   <div class="modal" style="max-width:380px;">
     <div class="modal-title" id="modal-qual-title">Nouvelle qualification</div>
-    
-    <!-- Zone photo OCR -->
-    <div class="photo-zone" onclick="triggerPhoto()" id="photo-zone">
-      <div class="icon">📷</div>
-      <p>Prendre une photo de ta licence / médicale<br>L'app extrait les dates automatiquement</p>
-    </div>
-    <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none" onchange="processPhoto(this)">
-    
-    <div class="ocr-spinner" id="ocr-spinner">🔍 Analyse en cours...</div>
-    
-    <div class="ocr-result" id="ocr-result">
-      <p>✓ Données extraites automatiquement</p>
-    </div>
-    
     <div class="modal-grid">
       <div class="field">
         <label>Type</label>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <select id="q-type" style="flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;" onchange="checkCustomQual(this)">
-            <option value="ATPL(H)">ATPL(H)</option>
-            <option value="IR(H)">IR(H)</option>
-            <option value="H145">Qualification H145</option>
-            <option value="AW139">Qualification AW139</option>
-            <option value="TRI(H)">TRI(H)</option>
-            <option value="TRE(H)">TRE(H)</option>
-            <option value="Medical Cl.1">Médical Classe 1</option>
-            <option value="Medical Cl.2">Médical Classe 2</option>
-            <option value="SEP(A)">SEP(A)</option>
-            <option value="__add__">+ Ajouter une qualification...</option>
-            <option value="__del__">🗑 Supprimer une qualification...</option>
-          </select>
-        </div>
-        <div id="q-custom-wrap" style="display:none;margin-top:6px;">
-          <input type="text" id="q-custom" placeholder="Nom de la qualification" 
-            style="background:var(--panel2);border:1px solid var(--accent);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;">
-          <button onclick="addCustomQual()" style="margin-top:6px;width:100%;padding:8px;background:var(--accent);border:none;border-radius:6px;color:#000;font-family:var(--font-mono);font-size:12px;font-weight:700;cursor:pointer;">AJOUTER AU MENU ✓</button>
-        </div>
+        <select id="q-type" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;">
+          <option value="ATPL(H)">ATPL(H)</option>
+          <option value="IR(H)">IR(H)</option>
+          <option value="H145">Qualification H145</option>
+          <option value="AW139">Qualification AW139</option>
+          <option value="TRI(H)">TRI(H)</option>
+          <option value="TRE(H)">TRE(H)</option>
+          <option value="Medical Cl.1">Médical Classe 1</option>
+          <option value="Medical Cl.2">Médical Classe 2</option>
+          <option value="SEP(A)">SEP(A)</option>
+        </select>
       </div>
-      <div class="field">
-        <label>Numéro / Référence</label>
-        <input type="text" id="q-ref" placeholder="FR.CPL.H.12345" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;">
-      </div>
-      <div class="field">
-        <label>Date de délivrance</label>
-        <input type="date" id="q-issued" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;">
-      </div>
-      <div class="field">
-        <label>Date d'expiration</label>
-        <input type="date" id="q-expires" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;">
-      </div>
-      <div class="field">
-        <label>Autorité</label>
-        <input type="text" id="q-authority" placeholder="DGAC / EASA" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;">
-      </div>
-      <div class="field">
-        <label>Notes</label>
-        <input type="text" id="q-notes" placeholder="Optionnel" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;">
-      </div>
+      <div class="field"><label>Numéro / Référence</label><input type="text" id="q-ref" placeholder="FR.CPL.H.12345" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
+      <div class="field"><label>Date de délivrance</label><input type="date" id="q-issued" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;"></div>
+      <div class="field"><label>Date d expiration</label><input type="date" id="q-expires" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;-webkit-appearance:none;"></div>
+      <div class="field"><label>Autorité</label><input type="text" id="q-authority" placeholder="DGAC / EASA" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
+      <div class="field"><label>Notes</label><input type="text" id="q-notes" placeholder="Optionnel" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--font-mono);font-size:13px;outline:none;width:100%;"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeQualModal()">Annuler</button>
@@ -618,8 +529,6 @@ function saveConfig() {
   if (!name || !sid || !email || !key) {
     showToast('⚠ Remplis tous les champs', true); return;
   }
-  // Nettoyer la clé privée : convertir \n littéraux en vrais sauts de ligne
-  key = key.replace(/\\n/g, '\n').replace(/\r/g, '').trim();
   CONFIG = { pilotName: name, homeBase: base||'ZZZZ', sheetId: sid, clientEmail: email, privateKey: key };
   saveConfigToStorage();
   document.getElementById('setup-screen').style.display = 'none';
@@ -755,9 +664,8 @@ function stampTime(which,event){
   r.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(event.offsetX-sz/2)+'px;top:'+(event.offsetY-sz/2)+'px;';
   btn.appendChild(r);setTimeout(function(){r.remove();},450);
   setTime(which,t);
-  // Détecter terrain le plus proche
-  if (which==='off') detectNearestAndFill('f-from');
-  if (which==='on')  detectNearestAndFill('f-to');
+  if(which==='off') detectNearestAndFill('f-from');
+  if(which==='on')  detectNearestAndFill('f-to');
 }
 function setTime(which,t){
   if(which==='off'){timeOff=t;var b=document.getElementById('stamp-off');b.textContent=t;b.className='clock-stamp '+stampClass();}
@@ -808,7 +716,16 @@ function onAircraftChange(){
 }
 
 // ── TABS ──────────────────────────────────────────────────────────
-// switchTab redéfini dans le module qualifs
+function switchTab(t){
+  ['form','history','fleet','qualifs'].forEach(function(id){
+    var el=document.getElementById('tab-'+id);
+    if(el) el.style.display=id===t?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach(function(el,i){
+    el.classList.toggle('active',['form','history','fleet','qualifs'][i]===t);
+  });
+  if(t==='qualifs'){ try{renderQualifs();}catch(e){} try{requestNotifPermission();}catch(e2){} }
+}
 
 // ── MODAL aéronef ─────────────────────────────────────────────────
 function openModal(){document.getElementById('modal').classList.add('show');}
@@ -872,19 +789,7 @@ async function getToken(){
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
   var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now}));
-  // Nettoyer la clé de TOUTES les façons possibles
-  var rawKey = CONFIG.privateKey || '';
-  // Nettoyer tous formats de sauts de ligne
-  rawKey = rawKey.replace(/\\n/g, '\n');
-  rawKey = rawKey.replace(/\r\n/g, '\n');
-  rawKey = rawKey.replace(/\r/g, '\n');
-  // Extraire uniquement le base64 pur
-  var pem = rawKey
-    .replace(/-----BEGIN PRIVATE KEY-----/g, '')
-    .replace(/-----END PRIVATE KEY-----/g, '')
-    .replace(/[\s\n\r\t]/g, '')          // tout whitespace
-    .replace(/[^A-Za-z0-9+\/=]/g, '');    // tout non-base64
-  if (!pem) throw new Error('Clé privée invalide ou vide');
+  var pem=CONFIG.privateKey.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
   var der=Uint8Array.from(atob(pem),function(c){return c.charCodeAt(0);});
   var key=await crypto.subtle.importKey('pkcs8',der,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['sign']);
   var sig=await crypto.subtle.sign('RSASSA-PKCS1-v1_5',key,new TextEncoder().encode(hdr+'.'+clm));
@@ -986,109 +891,7 @@ function showToast(msg,err){
   setTimeout(function(){t.classList.add('show');},10);setTimeout(function(){t.classList.remove('show');},3500);
 }
 
-// ── BASE TERRAINS (chargée depuis airports.js) ──────────────────
-var AIRPORTS = []; // Sera rempli par airports.js
-
-// Index de recherche
-var AC_IDX = null;
-function buildIndex() {
-  if (AC_IDX) return;
-  AC_IDX = {};
-  if (!AIRPORTS || !AIRPORTS.length) return;
-  AIRPORTS.forEach(function(a,i) {
-    // Format: [icao, name, lat, lon]
-    var k = a[0].toUpperCase();
-    if (!AC_IDX[k]) AC_IDX[k] = [];
-    AC_IDX[k].push(i);
-    // Index par mots du nom
-    a[1].toUpperCase().split(/[\s\/\-]+/).forEach(function(w) {
-      if (w.length < 2) return;
-      if (!AC_IDX[w]) AC_IDX[w] = [];
-      AC_IDX[w].push(i);
-    });
-  });
-}
-
-function acSearch(input, dropId) {
-  buildIndex();
-  var q = input.value.trim().toUpperCase();
-  var drop = document.getElementById(dropId);
-  if (q.length < 2) { drop.innerHTML=''; drop.classList.remove('open'); return; }
-  
-  var scores = {};
-  // Recherche OACI exact en priorité
-  Object.keys(AC_IDX).forEach(function(k) {
-    if (k.startsWith(q)) {
-      AC_IDX[k].forEach(function(i) {
-        scores[i] = (scores[i]||0) + (k === q ? 100 : 10);
-      });
-    }
-  });
-  
-  var results = Object.keys(scores)
-    .sort(function(a,b) { return scores[b]-scores[a] || AIRPORTS[a].i.localeCompare(AIRPORTS[b].i); })
-    .slice(0,8)
-    .map(function(i) { return AIRPORTS[i]; });
-  
-  if (!results.length) { drop.innerHTML=''; drop.classList.remove('open'); return; }
-  
-  drop.innerHTML = results.map(function(a,idx) {
-    return '<div class="ac-item" data-icao="'+a[0]+'" data-lat="'+a[2]+'" data-lon="'+a[3]+
-           '" data-idx="'+idx+'" onclick="acSelect(this,\''+dropId+'\',\''+input.id+'\')">' +
-           '<span class="ac-icao">'+a[0]+'</span><span class="ac-name">'+a[1]+'</span></div>';
-  }).join('');
-  drop.classList.add('open');
-  drop.querySelector('.ac-item') && drop.querySelector('.ac-item').classList.add('selected');
-}
-
-function acSelect(item, dropId, inputId) {
-  var icao = item.getAttribute('data-icao');
-  var lat  = parseFloat(item.getAttribute('data-lat'));
-  var lon  = parseFloat(item.getAttribute('data-lon'));
-  document.getElementById(inputId).value = icao;
-  document.getElementById(dropId).classList.remove('open');
-  // Utiliser les coordonnées du terrain si pas de GPS
-  if (!gpsLat) {
-    gpsLat = lat; gpsLon = lon;
-    document.getElementById('gps-dot').className = 'gps-dot ok';
-    document.getElementById('gps-text').textContent = icao + ' (' + lat.toFixed(3) + '°/' + lon.toFixed(3) + '°)';
-    updateSunDisplay();
-  }
-}
-
-function acKey(event, dropId) {
-  var drop = document.getElementById(dropId);
-  var items = drop.querySelectorAll('.ac-item');
-  var sel = drop.querySelector('.ac-item.selected');
-  var idx = sel ? parseInt(sel.getAttribute('data-idx')) : -1;
-  if (event.key === 'ArrowDown') {
-    event.preventDefault();
-    var next = Math.min(idx+1, items.length-1);
-    items.forEach(function(it){it.classList.remove('selected');});
-    if (items[next]) items[next].classList.add('selected');
-  } else if (event.key === 'ArrowUp') {
-    event.preventDefault();
-    var prev = Math.max(idx-1, 0);
-    items.forEach(function(it){it.classList.remove('selected');});
-    if (items[prev]) items[prev].classList.add('selected');
-  } else if (event.key === 'Enter') {
-    event.preventDefault();
-    if (sel) sel.click();
-  } else if (event.key === 'Escape') {
-    drop.classList.remove('open');
-  }
-}
-
-// Fermer dropdown si clic ailleurs
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.ac-wrap')) {
-    document.querySelectorAll('.ac-drop').forEach(function(d){d.classList.remove('open');});
-  }
-});
-
-
 // ── QUALIFICATIONS ───────────────────────────────────────────────
-
 var qualEditIdx = null;
 var qualModalCat = 'licence';
 
@@ -1097,17 +900,6 @@ function loadQualifs() {
 }
 function saveQualifs(q) {
   try { localStorage.setItem('cvol_qualifs', JSON.stringify(q)); } catch(e) {}
-}
-
-function switchTab(t) {
-  ['form','history','fleet','qualifs'].forEach(function(id){
-    var el = document.getElementById('tab-'+id);
-    if (el) el.style.display = id===t ? 'block' : 'none';
-  });
-  document.querySelectorAll('.tab').forEach(function(el,i){
-    el.classList.toggle('active', ['form','history','fleet','qualifs'][i]===t);
-  });
-  if (t==='qualifs') { renderQualifs(); requestNotifPermission(); }
 }
 
 function daysUntil(dateStr) {
@@ -1119,10 +911,10 @@ function daysUntil(dateStr) {
 }
 
 function qualStatus(days) {
-  if (days < 0)  return {cls:'qual-exp',  badge:'badge-exp',  label:'EXPIRÉ'};
-  if (days <= 7) return {cls:'qual-crit', badge:'badge-crit', label:'CRITIQUE'};
-  if (days <= 30) return {cls:'qual-warn', badge:'badge-warn', label:'BIENTÔT'};
-  if (days <= 90) return {cls:'qual-warn', badge:'badge-warn', label:'À RENOUVELER'};
+  if (days < 0)   return {cls:'qual-exp',  badge:'badge-exp',  label:'EXPIRE'};
+  if (days <= 7)  return {cls:'qual-crit', badge:'badge-crit', label:'CRITIQUE'};
+  if (days <= 30) return {cls:'qual-warn', badge:'badge-warn', label:'BIENTOT'};
+  if (days <= 90) return {cls:'qual-warn', badge:'badge-warn', label:'A RENOUVELER'};
   return {cls:'qual-ok', badge:'badge-ok', label:'VALIDE'};
 }
 
@@ -1134,55 +926,59 @@ function renderQualifs() {
 
   function renderList(list, containerId) {
     var el = document.getElementById(containerId);
-    if (!list.length) { el.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px;padding:8px;">Aucune entrée.</div>'; return; }
-    el.innerHTML = list.map(function(q,i) {
+    if (!el) return;
+    if (!list.length) {
+      el.innerHTML = '<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px;padding:8px;">Aucune entree.</div>';
+      return;
+    }
+    var html = '';
+    list.forEach(function(q) {
       var days = daysUntil(q.expires);
       var s = qualStatus(days);
-      var daysLabel = days<0 ? 'Expiré depuis '+(Math.abs(days))+' j'
-                    : days===0 ? 'Expire aujourd\'hui !'
-                    : 'Expire dans '+days+' j';
-      var globalIdx = qualifs.indexOf(q);
-      return '<div class="qual-card '+s.cls+'">'
-        +'<div class="qual-header"><div class="qual-name">'+q.type+(q.ref?' — <span style="font-weight:400;color:var(--muted)">'+q.ref+'</span>':'')+'</div>'
-        +'<span class="qual-badge '+s.badge+'">'+s.label+'</span></div>'
-        +(q.issued?'<div class="qual-dates">Délivré : <span>'+q.issued+'</span></div>':'')
-        +(q.expires?'<div class="qual-dates">Expire : <span>'+q.expires+'</span> — <span style="color:'+(days<0?'#ff4444':days<=30?'#ff6b35':'var(--green)')+'">'+daysLabel+'</span></div>':'')
-        +(q.authority?'<div class="qual-dates">Autorité : <span>'+q.authority+'</span></div>':'')
-        +(q.notes?'<div class="qual-dates">Notes : <span>'+q.notes+'</span></div>':'')
-        +'<div class="qual-actions">'
-        +'<button class="btn-qual-photo" onclick="openQualModalEdit('+globalIdx+')">📷 Mettre à jour</button>'
-        +'<button class="btn-qual-edit" onclick="openQualModalEdit('+globalIdx+')">✎ Modifier</button>'
-        +'<button class="btn-qual-del" onclick="deleteQual('+globalIdx+')">🗑</button>'
-        +'</div></div>';
-    }).join('');
+      var col = days < 0 ? '#ff4444' : days <= 30 ? '#ff6b35' : 'var(--green)';
+      var daysLabel = days < 0 ? ('Expire depuis '+Math.abs(days)+' j') : days === 0 ? 'Expire ce jour' : ('Expire dans '+days+' j');
+      var idx = qualifs.indexOf(q);
+      html += '<div class="qual-card '+s.cls+'">';
+      html += '<div class="qual-header">';
+      html += '<div class="qual-name">'+q.type+(q.ref?' <span style="font-weight:400;color:var(--muted)">'+q.ref+'</span>':'')+'</div>';
+      html += '<span class="qual-badge '+s.badge+'">'+s.label+'</span>';
+      html += '</div>';
+      if (q.issued) html += '<div class="qual-dates">Delivre : <span>'+q.issued+'</span></div>';
+      if (q.expires) html += '<div class="qual-dates">Expire : <span>'+q.expires+'</span> <span style="color:'+col+'">— '+daysLabel+'</span></div>';
+      if (q.authority) html += '<div class="qual-dates">Autorite : <span>'+q.authority+'</span></div>';
+      if (q.notes) html += '<div class="qual-dates">Notes : <span>'+q.notes+'</span></div>';
+      html += '<div class="qual-actions">';
+      html += '<button class="btn-qual-edit" onclick="openQualModalEdit('+idx+')">Modifier</button>';
+      html += '<button class="btn-qual-del" onclick="deleteQual('+idx+')">X</button>';
+      html += '</div></div>';
+    });
+    el.innerHTML = html;
   }
 
   renderList(licences, 'qualifs-licences');
   renderList(medicals, 'qualifs-medicals');
   renderList(recences, 'qualifs-recences');
 
-  // Badge sur l\'onglet si qualif critique
   var critCount = qualifs.filter(function(q){ return daysUntil(q.expires) <= 30; }).length;
   var tabBtn = document.getElementById('tab-btn-qualifs');
-  if (tabBtn) tabBtn.textContent = critCount > 0 ? 'Qualifs 🔴' : 'Qualifs';
-
-  // Programmer les notifications
+  if (tabBtn) tabBtn.textContent = critCount > 0 ? 'Qualifs !' : 'Qualifs';
   scheduleNotifications(qualifs);
 }
 
 function openQualModal(cat) {
   qualEditIdx = null;
-  qualModalCat = cat||'licence';
+  qualModalCat = cat || 'licence';
   document.getElementById('modal-qual-title').textContent =
-    cat==='medical' ? 'Nouvelle visite médicale' :
-    cat==='recence' ? 'Nouvelle récence' : 'Nouvelle qualification';
-  document.getElementById('q-type').value = cat==='medical' ? 'Medical Cl.1' : 'CPL(H)';
-  ['q-ref','q-notes','q-authority'].forEach(function(id){document.getElementById(id).value='';});
-  ['q-issued','q-expires'].forEach(function(id){document.getElementById(id).value='';});
-  buildQualSelect();
-  document.getElementById('q-custom-wrap').style.display='none';
-  document.getElementById('ocr-result').classList.remove('show');
-  document.getElementById('ocr-spinner').classList.remove('show');
+    cat==='medical' ? 'Nouvelle visite medicale' :
+    cat==='recence' ? 'Nouvelle recence' : 'Nouvelle qualification';
+  var defVal = cat==='medical' ? 'Medical Cl.1' : 'ATPL(H)';
+  var sel = document.getElementById('q-type');
+  if (sel) sel.value = defVal;
+  document.getElementById('q-ref').value = '';
+  document.getElementById('q-issued').value = '';
+  document.getElementById('q-expires').value = '';
+  document.getElementById('q-authority').value = '';
+  document.getElementById('q-notes').value = '';
   document.getElementById('modal-qual').classList.add('show');
 }
 
@@ -1191,18 +987,14 @@ function openQualModalEdit(idx) {
   var q = qualifs[idx];
   if (!q) return;
   qualEditIdx = idx;
-  qualModalCat = q.cat||'licence';
+  qualModalCat = q.cat || 'licence';
   document.getElementById('modal-qual-title').textContent = 'Modifier — '+q.type;
-  document.getElementById('q-type').value = q.type||'';
-  document.getElementById('q-ref').value = q.ref||'';
-  document.getElementById('q-issued').value = q.issued||'';
-  document.getElementById('q-expires').value = q.expires||'';
-  document.getElementById('q-authority').value = q.authority||'';
-  document.getElementById('q-notes').value = q.notes||'';
-  buildQualSelect();
-  document.getElementById('q-custom-wrap').style.display='none';
-  document.getElementById('ocr-result').classList.remove('show');
-  document.getElementById('ocr-spinner').classList.remove('show');
+  document.getElementById('q-type').value = q.type || '';
+  document.getElementById('q-ref').value = q.ref || '';
+  document.getElementById('q-issued').value = q.issued || '';
+  document.getElementById('q-expires').value = q.expires || '';
+  document.getElementById('q-authority').value = q.authority || '';
+  document.getElementById('q-notes').value = q.notes || '';
   document.getElementById('modal-qual').classList.add('show');
 }
 
@@ -1218,18 +1010,15 @@ function saveQual() {
   var expires = document.getElementById('q-expires').value;
   var auth    = document.getElementById('q-authority').value.trim();
   var notes   = document.getElementById('q-notes').value.trim();
-  if (!type || !expires) { showToast('⚠ Type et date d\'expiration requis', true); return; }
+  if (!type || !expires) { showToast('Type et date expiration requis', true); return; }
   var qualifs = loadQualifs();
-  var entry = { cat: qualModalCat, type: type, ref: ref, issued: issued, expires: expires, authority: auth, notes: notes };
-  if (qualEditIdx !== null) {
-    qualifs[qualEditIdx] = entry;
-  } else {
-    qualifs.push(entry);
-  }
+  var entry = {cat:qualModalCat, type:type, ref:ref, issued:issued, expires:expires, authority:auth, notes:notes};
+  if (qualEditIdx !== null) qualifs[qualEditIdx] = entry;
+  else qualifs.push(entry);
   saveQualifs(qualifs);
   closeQualModal();
   renderQualifs();
-  showToast('✓ Qualification enregistrée');
+  showToast('Qualification enregistree');
 }
 
 function deleteQual(idx) {
@@ -1238,535 +1027,145 @@ function deleteQual(idx) {
   qualifs.splice(idx, 1);
   saveQualifs(qualifs);
   renderQualifs();
-  showToast('✓ Supprimé');
+  showToast('Supprime');
 }
 
-// ── OCR PAR PHOTO ─────────────────────────────────────────────────
-function triggerPhoto() {
-  document.getElementById('photo-input').click();
-}
-
-async function processPhoto(input) {
-  if (!input.files || !input.files[0]) return;
-  var file = input.files[0];
-  var spinner = document.getElementById('ocr-spinner');
-  var result  = document.getElementById('ocr-result');
-  spinner.classList.add('show');
-  result.classList.remove('show');
-
-  try {
-    // Convertir en base64
-    var b64 = await new Promise(function(res,rej){
-      var r = new FileReader();
-      r.onload = function(){ res(r.result.split(',')[1]); };
-      r.onerror = function(){ rej(new Error('Lecture image impossible')); };
-      r.readAsDataURL(file);
-    });
-
-    // Appel API Claude OCR
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-calls': 'true' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: file.type||'image/jpeg', data: b64 }
-            },
-            {
-              type: 'text',
-              text: 'Analyse ce document (licence pilote EASA/DGAC ou certificat médical). Extrait UNIQUEMENT en JSON sans rien d\'autre : {"type":"type de licence ou Medical Cl.1/Cl.2","ref":"numéro de référence","issued":"YYYY-MM-DD ou vide","expires":"YYYY-MM-DD ou vide","authority":"DGAC ou EASA ou autre"} . Si tu ne reconnais pas un champ met une chaine vide. Les dates doivent être au format YYYY-MM-DD.'
-            }
-          ]
-        }]
-      })
-    });
-
-    var data = await resp.json();
-    var txt = data.content && data.content[0] ? data.content[0].text : '';
-
-    // Parser le JSON retourné
-    var jsonMatch = txt.match(/\{[^}]+\}/);
-    if (jsonMatch) {
-      var parsed = JSON.parse(jsonMatch[0]);
-      if (parsed.type)    document.getElementById('q-type').value    = parsed.type;
-      if (parsed.ref)     document.getElementById('q-ref').value     = parsed.ref;
-      if (parsed.issued)  document.getElementById('q-issued').value  = parsed.issued;
-      if (parsed.expires) document.getElementById('q-expires').value = parsed.expires;
-      if (parsed.authority) document.getElementById('q-authority').value = parsed.authority;
-      result.innerHTML = '<p>✓ Données extraites — vérifie et corrige si nécessaire</p>'
-        +(parsed.type?'<div style="font-size:10px;color:var(--text);">Type: '+parsed.type+'</div>':'')
-        +(parsed.expires?'<div style="font-size:10px;color:var(--text);">Expire: '+parsed.expires+'</div>':'');
-      result.classList.add('show');
-      showToast('✓ Document analysé');
-    } else {
-      showToast('⚠ Impossible d\'extraire les données — remplis manuellement', true);
-    }
-  } catch(e) {
-    showToast('✗ Erreur OCR: '+e.message, true);
-  } finally {
-    spinner.classList.remove('show');
-    input.value = '';
-  }
-}
-
-// ── NOTIFICATIONS PUSH ────────────────────────────────────────────
-async function requestNotifPermission() {
-  if (!('Notification' in window)) {
-    document.getElementById('notif-banner').classList.add('show');
-    return;
-  }
-  if (Notification.permission === 'default') {
-    var perm = await Notification.requestPermission();
-    if (perm !== 'granted') {
-      document.getElementById('notif-banner').classList.add('show');
-    }
-  }
-  if (Notification.permission === 'granted') {
-    document.getElementById('notif-banner').classList.remove('show');
-  }
-}
-
-function scheduleNotifications(qualifs) {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  var thresholds = [90, 30, 7];
-  qualifs.forEach(function(q) {
-    if (!q.expires) return;
-    var days = daysUntil(q.expires);
-    thresholds.forEach(function(t) {
-      if (days === t) {
-        setTimeout(function(){
-          new Notification('⚠ Carnet de Vol — ' + q.type, {
-            body: 'Expire dans ' + days + ' jours (' + q.expires + ')',
-            icon: '/favicon.ico',
-            tag: q.type + '-' + t
-          });
-        }, 1000);
-      }
-    });
-    // Alerte immédiate si expiré ou critique
-    if (days <= 7 && days >= 0) {
-      setTimeout(function(){
-        new Notification('🚨 URGENT — ' + q.type, {
-          body: days === 0 ? 'Expire AUJOURD\'HUI !' : 'Expire dans ' + days + ' j !',
-          icon: '/favicon.ico',
-          tag: q.type + '-urgent'
-        });
-      }, 2000);
-    }
-  });
-}
-
-// Vérifier les qualifs au démarrage
 function checkQualifsBadge() {
   var qualifs = loadQualifs();
   var critCount = qualifs.filter(function(q){ return daysUntil(q.expires) <= 30; }).length;
   var tabBtn = document.getElementById('tab-btn-qualifs');
-  if (tabBtn && critCount > 0) tabBtn.textContent = 'Qualifs 🔴';
+  if (tabBtn && critCount > 0) tabBtn.textContent = 'Qualifs !';
 }
 
-
-// ── STATISTIQUES ─────────────────────────────────────────────────
-
-var statsYear = new Date().getFullYear();
-
-async function loadStatsData() {
-  function dbg(msg) {
-    var box = document.getElementById('debug-box');
-    if (box) { box.style.display='block'; box.textContent += msg + '\n'; }
-  }
-  try {
-    showToast('Stats: getToken...', false);
-    var token = await getToken();
-    showToast('Stats: token OK', false);
-    var sheets = ['Hélicoptère','Avion','Simulateur'];
-    var allRows = [];
-    for (var s of sheets) {
-      var range = encodeURIComponent(s + '!A3:R');
-      var url = 'https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+
-                '/values/'+range+'?majorDimension=ROWS';
-      showToast('fetch: ' + s, false);
-      var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
-      var data = await resp.json();
-      showToast(s + ': status=' + resp.status + ' keys=' + Object.keys(data).join(','), false);
-      if (data.error) { showToast('ERR: ' + JSON.stringify(data.error), true); continue; }
-      if (data.values) {
-        var count = 0;
-        // Afficher la première date pour debug
-        if (data.values[0] && count===0) {
-          showToast(s + ' date[0]=' + JSON.stringify(data.values[0][0]), false);
-        }
-        data.values.forEach(function(row) {
-          if (row[0]) { allRows.push({cat:s, row:row}); count++; }
-        });
-        dbg(s + ': ' + count + ' lignes');
-      } else {
-        dbg(s + ': vide');
-      }
+function scheduleNotifications(qualifs) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  qualifs.forEach(function(q) {
+    if (!q.expires) return;
+    var days = daysUntil(q.expires);
+    if (days === 90 || days === 30 || days === 7) {
+      new Notification('Carnet de Vol — '+q.type, {body:'Expire dans '+days+' jours ('+q.expires+')', tag:q.type+'-'+days});
     }
-    return allRows;
-  } catch(e) {
-    var box = document.getElementById('debug-box');
-    if (box) { box.style.display='block'; box.textContent += 'ERREUR: ' + e.message + '\n'; }
-    showToast('✗ Erreur chargement stats: '+e.message, true);
-    return [];
-  }
+    if (days <= 7 && days >= 0) {
+      new Notification('URGENT — '+q.type, {body:days===0?'Expire ce jour':'Expire dans '+days+' j', tag:q.type+'-urgent'});
+    }
+  });
 }
 
-function parseRowDate(dateStr) {
-  if (!dateStr) return null;
-  var s = String(dateStr).trim();
-  // Format DD.MM.YYYY
-  var m = s.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
-  if (m) return new Date(m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'));
-  // Format DD/MM/YYYY
-  m = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-  if (m) return new Date(m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'));
-  // Format YYYY-MM-DD
-  m = s.match(/(\d{4})-(\d{2})-(\d{2})/);
-  if (m) return new Date(s);
-  // Objet Date retourné par Sheets
-  if (dateStr instanceof Date) return dateStr;
-  return null;
+async function requestNotifPermission() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'default') await Notification.requestPermission();
 }
 
-async function renderStats() {
-  showToast('renderStats START', false);
-  // Réinitialiser le cache token pour forcer un nouveau token
-  accessToken = null; tokenExpiry = 0;
-  // Afficher debug box immédiatement
-  var box = document.getElementById('debug-box');
-  if (box) { box.style.display='block'; box.textContent = 'renderStats() démarré...\n'; }
-  var allRows = [];
-  try {
-    allRows = await loadStatsData();
-  } catch(e) {
-    showToast('Stats erreur: ' + e.message, true);
-    return;
-  }
-  if (!allRows.length) {
-    showToast('Stats: aucune donnée', true);
-    return;
-  }
 
-  try {
-    // Détecter les années disponibles
-    var years = {};
-    allRows.forEach(function(r) {
-      var d = parseRowDate(r.row[0]);
-      if (d) years[d.getFullYear()] = true;
+// ── BASE TERRAINS ─────────────────────────────────────────────────
+var AIRPORTS = [];
+var AC_IDX = null;
+
+function buildIndex() {
+  if (AC_IDX) return;
+  AC_IDX = {};
+  AIRPORTS.forEach(function(a, i) {
+    var k = a[0].toUpperCase();
+    if (!AC_IDX[k]) AC_IDX[k] = [];
+    AC_IDX[k].push(i);
+    a[1].toUpperCase().split(/[\s\/\-]+/).forEach(function(w) {
+      if (w.length < 2) return;
+      if (!AC_IDX[w]) AC_IDX[w] = [];
+      AC_IDX[w].push(i);
     });
-    var yearList = Object.keys(years).map(Number).sort();
-
-    // Sélecteur années
-    var sel = document.getElementById('stats-year-sel');
-    sel.innerHTML = ['Tout'].concat(yearList.map(String)).map(function(y) {
-      return '<button class="year-btn'+(String(statsYear)===String(y)||(!yearList.includes(statsYear)&&y==='Tout')?' active':'')+
-             '" onclick="selectYear('+JSON.stringify(y)+', this)">'+y+'</button>';
-    }).join('');
-
-    computeStats(allRows, statsYear);
-  } catch(e) { showToast('Stats erreur: '+e.message, true); }
-}
-
-function selectYear(y, btn) {
-  statsYear = y;
-  document.querySelectorAll('.year-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  loadStatsData().then(function(rows){ computeStats(rows, y); });
-}
-
-function toMins(hhmm) {
-  if (!hhmm) return 0;
-  if (hhmm instanceof Date) return hhmm.getUTCHours()*60 + hhmm.getUTCMinutes();
-  if (typeof hhmm === 'number') return Math.round(hhmm * 24 * 60);
-  var s = String(hhmm).trim();
-  if (!s || s==='0' || s==='0:00' || s==='00:00') return 0;
-  var p = s.split(':');
-  if (p.length >= 2) return (parseInt(p[0])||0)*60 + (parseInt(p[1])||0);
-  var n = parseFloat(s.replace(',','.'));
-  if (!isNaN(n) && n > 0) return Math.round(n * 60);
-  return 0;
-}
-
-function computeStats(allRows, year) {
-  // Filtrer par année
-  var rows = allRows.filter(function(r) {
-    var d = parseRowDate(r.row[0]);
-    if (!d) return false;
-    return year==='Tout' || d.getFullYear()===Number(year);
-  });
-
-  // KPIs
-  var totalMins=0, nuitMins=0, vols=0;
-  var flightDays = {};
-  var byMonth = {};
-  var byType = {};
-  var byRole = {};
-
-  rows.forEach(function(r) {
-    var row = r.row;
-    if (r.cat === 'Simulateur') return; // exclure sim des stats vol
-    var d = parseRowDate(row[0]);
-    if (!d) return;
-    var dur = toMins(row[4]);  // Durée col E
-    var nuit = toMins(row[15]); // Nuit col P
-    var type = row[7]||'?';    // Type col H
-    var role = row[1]||'?';    // Rôle col B
-    var monthKey = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    var dayKey = d.toISOString().split('T')[0];
-
-    totalMins += dur;
-    nuitMins += nuit;
-    vols++;
-    flightDays[dayKey] = (flightDays[dayKey]||0) + 1;
-    byMonth[monthKey] = (byMonth[monthKey]||0) + dur;
-    byType[type] = (byType[type]||0) + dur;
-    byRole[role] = (byRole[role]||0) + dur;
-  });
-
-  // KPI cards
-  document.getElementById('s-total-h').textContent = minsToHHMM(totalMins);
-  document.getElementById('s-total-v').textContent = vols;
-  document.getElementById('s-jours').textContent = Object.keys(flightDays).length;
-  document.getElementById('s-nuit').textContent = minsToHHMM(nuitMins);
-
-  // Heatmap
-  renderHeatmap(flightDays, year);
-
-  // Graphique mois
-  renderBarChart('chart-months', byMonth, function(k){
-    var m=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-    return m[parseInt(k.split('-')[1])-1];
-  }, 'var(--accent)');
-
-  // Graphique types
-  renderBarChart('chart-types', byType, function(k){return k;}, 'var(--green)');
-
-  // Pie jour/nuit
-  renderPie(totalMins-nuitMins, nuitMins);
-
-  // Graphique rôles
-  renderBarChart('chart-roles', byRole, function(k){return k;}, 'var(--accent2)');
-}
-
-function renderHeatmap(flightDays, year) {
-  var hm = document.getElementById('heatmap');
-  var months = document.getElementById('hm-months');
-  hm.innerHTML = '';
-  months.innerHTML = '';
-
-  var y = year==='Tout' ? new Date().getFullYear() : Number(year);
-  var start = new Date(y, 0, 1);
-  // Commencer au lundi précédent
-  var startDay = start.getDay(); // 0=dim
-  var offset = startDay === 0 ? 6 : startDay - 1;
-
-  // Cellules vides au début
-  for (var i=0; i<offset; i++) {
-    var empty = document.createElement('div');
-    empty.className = 'hm-cell';
-    hm.appendChild(empty);
-  }
-
-  // Labels mois
-  var monthLabels = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-  var monthCols = new Array(12).fill(0);
-
-  var d = new Date(y, 0, 1);
-  var col = offset;
-  while (d.getFullYear() === y) {
-    var key = d.toISOString().split('T')[0];
-    var count = flightDays[key]||0;
-    var cell = document.createElement('div');
-    cell.className = 'hm-cell' + (count===0?'': count===1?' hm-1': count===2?' hm-2': count===3?' hm-3':' hm-4');
-    cell.title = key + (count>0?' — '+count+' vol'+(count>1?'s':''):'');
-    hm.appendChild(cell);
-    if (d.getDate()===1) monthCols[d.getMonth()] = Math.floor(col/7);
-    col++;
-    d.setDate(d.getDate()+1);
-  }
-
-  // Afficher labels mois
-  monthLabels.forEach(function(m, i) {
-    var lbl = document.createElement('div');
-    lbl.className = 'hm-month-lbl';
-    lbl.textContent = m;
-    lbl.style.marginLeft = i===0 ? '0' : '0';
-    months.appendChild(lbl);
   });
 }
 
-function renderBarChart(containerId, data, labelFn, color) {
-  var el = document.getElementById(containerId);
-  if (!el) return;
-  var entries = Object.entries(data).sort(function(a,b){return b[1]-a[1];}).slice(0,12);
-  if (!entries.length) { el.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px;">Aucune donnée</div>'; return; }
-  var max = Math.max.apply(null, entries.map(function(e){return e[1];}));
-  el.innerHTML = entries.map(function(e) {
-    var pct = max>0 ? Math.round(e[1]/max*100) : 0;
-    return '<div class="bar-row">'
-      +'<div class="bar-lbl">'+labelFn(e[0])+'</div>'
-      +'<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+';"></div></div>'
-      +'<div class="bar-val">'+minsToHHMM(e[1])+'</div>'
-      +'</div>';
+function acSearch(input, dropId) {
+  buildIndex();
+  var q = input.value.trim().toUpperCase();
+  var drop = document.getElementById(dropId);
+  if (q.length < 2) { drop.innerHTML=''; drop.classList.remove('open'); return; }
+  var scores = {};
+  Object.keys(AC_IDX).forEach(function(k) {
+    if (k.startsWith(q)) {
+      AC_IDX[k].forEach(function(i) { scores[i] = (scores[i]||0) + (k===q?100:10); });
+    }
+  });
+  var results = Object.keys(scores)
+    .sort(function(a,b){return scores[b]-scores[a]||AIRPORTS[a][0].localeCompare(AIRPORTS[b][0]);})
+    .slice(0,8).map(function(i){return AIRPORTS[i];});
+  if (!results.length) { drop.innerHTML=''; drop.classList.remove('open'); return; }
+  drop.innerHTML = results.map(function(a, idx) {
+    return '<div class="ac-item" data-icao="'+a[0]+'" data-lat="'+a[2]+'" data-lon="'+a[3]+
+           '" data-idx="'+idx+'" onclick="acSelect(this,\''+dropId+'\',\''+input.id+'\')">' +
+           '<span class="ac-icao">'+a[0]+'</span><span class="ac-name">'+a[1]+'</span></div>';
   }).join('');
+  drop.classList.add('open');
+  var first = drop.querySelector('.ac-item');
+  if (first) first.classList.add('selected');
 }
 
-function renderPie(jourMins, nuitMins) {
-  var canvas = document.getElementById('pie-canvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var total = jourMins + nuitMins;
-  if (total===0) return;
-  
-  var data = [
-    {val:jourMins, color:'#f6c90e', label:'Jour'},
-    {val:nuitMins, color:'#7c6fcd', label:'Nuit'},
-  ];
-
-  ctx.clearRect(0,0,120,120);
-  var startAngle = -Math.PI/2;
-  var cx=60, cy=60, r=55;
-  data.forEach(function(d) {
-    var slice = (d.val/total)*2*Math.PI;
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,startAngle,startAngle+slice);
-    ctx.closePath();
-    ctx.fillStyle = d.color;
-    ctx.fill();
-    startAngle += slice;
-  });
-  // Trou central
-  ctx.beginPath();
-  ctx.arc(cx,cy,30,0,2*Math.PI);
-  ctx.fillStyle = 'var(--panel)';
-  ctx.fill();
-  // Texte central
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = 'bold 11px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(minsToHHMM(total), cx, cy);
-
-  // Légende
-  var legend = document.getElementById('pie-legend');
-  legend.innerHTML = data.map(function(d) {
-    return '<div class="pie-item"><div class="pie-dot" style="background:'+d.color+'"></div>'
-      +d.label+' '+minsToHHMM(d.val)+' ('+Math.round(d.val/total*100)+'%)</div>';
-  }).join('');
+function acSelect(item, dropId, inputId) {
+  var icao = item.getAttribute('data-icao');
+  var lat  = parseFloat(item.getAttribute('data-lat'));
+  var lon  = parseFloat(item.getAttribute('data-lon'));
+  document.getElementById(inputId).value = icao;
+  document.getElementById(dropId).classList.remove('open');
+  if (!gpsLat) {
+    gpsLat = lat; gpsLon = lon;
+    document.getElementById('gps-dot').className = 'gps-dot ok';
+    document.getElementById('gps-text').textContent = icao+' ('+lat.toFixed(3)+'/'+lon.toFixed(3)+')';
+    updateSunDisplay();
+  }
 }
 
+function acKey(event, dropId) {
+  var drop = document.getElementById(dropId);
+  var items = drop.querySelectorAll('.ac-item');
+  var sel = drop.querySelector('.ac-item.selected');
+  var idx = sel ? parseInt(sel.getAttribute('data-idx')) : -1;
+  if (event.key==='ArrowDown') { event.preventDefault(); var n=Math.min(idx+1,items.length-1); items.forEach(function(it){it.classList.remove('selected');}); if(items[n])items[n].classList.add('selected'); }
+  else if (event.key==='ArrowUp') { event.preventDefault(); var p=Math.max(idx-1,0); items.forEach(function(it){it.classList.remove('selected');}); if(items[p])items[p].classList.add('selected'); }
+  else if (event.key==='Enter') { event.preventDefault(); if(sel)sel.click(); }
+  else if (event.key==='Escape') { drop.classList.remove('open'); }
+}
 
-// ── DÉTECTION TERRAIN LE PLUS PROCHE ────────────────────────────
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.ac-wrap')) {
+    document.querySelectorAll('.ac-drop').forEach(function(d){d.classList.remove('open');});
+  }
+});
+
+// ── DÉTECTION TERRAIN LE PLUS PROCHE ─────────────────────────────
 function haversine(lat1, lon1, lat2, lon2) {
   var R = 6371;
   var dLat = (lat2-lat1)*Math.PI/180;
   var dLon = (lon2-lon1)*Math.PI/180;
-  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
-          Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
-          Math.sin(dLon/2)*Math.sin(dLon/2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
 function findNearestAirport(lat, lon, maxKm) {
-  if (!AIRPORTS || !AIRPORTS.length) return null;
-  maxKm = maxKm || 5;
-  var best = null, bestDist = maxKm;
+  if (!AIRPORTS||!AIRPORTS.length) return null;
+  maxKm = maxKm||5;
+  var best=null, bestDist=maxKm;
   AIRPORTS.forEach(function(a) {
-    // Format: [icao, name, lat, lon]
     var d = haversine(lat, lon, a[2], a[3]);
-    if (d < bestDist) { bestDist = d; best = a; }
+    if (d < bestDist) { bestDist=d; best=a; }
   });
-  return best ? {icao: best[0], name: best[1], lat: best[2], lon: best[3], dist: bestDist} : null;
+  return best ? {icao:best[0], name:best[1], lat:best[2], lon:best[3], dist:bestDist} : null;
 }
 
 function detectNearestAndFill(fieldId) {
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(function(pos) {
-    var lat = pos.coords.latitude;
-    var lon = pos.coords.longitude;
+    var lat=pos.coords.latitude, lon=pos.coords.longitude;
     var nearest = findNearestAirport(lat, lon, 5);
     if (nearest) {
       var input = document.getElementById(fieldId);
       if (!input.value) {
         input.value = nearest.icao;
-        showToast('📍 ' + nearest.icao + ' — ' + nearest.name.substring(0,25) + ' (' + nearest.dist.toFixed(1) + ' km)');
-        // Utiliser les coordonnées du terrain pour le calcul soleil
-        if (!gpsLat) {
-          gpsLat = nearest.lat; gpsLon = nearest.lon;
-          updateSunDisplay();
-        }
+        showToast('Terrain: '+nearest.icao+' ('+nearest.dist.toFixed(1)+' km)');
+        if (!gpsLat) { gpsLat=nearest.lat; gpsLon=nearest.lon; updateSunDisplay(); }
       }
     }
   }, null, {timeout:5000, maximumAge:30000});
-}
-
-
-// ── QUALIFICATIONS CUSTOM ─────────────────────────────────────────
-var DEFAULT_QUALS = ['ATPL(H)','IR(H)','H145','AW139','TRI(H)','TRE(H)','Medical Cl.1','Medical Cl.2','SEP(A)'];
-
-function loadCustomQuals() {
-  try { return JSON.parse(localStorage.getItem('cvol_custom_quals')||'[]'); } catch(e) { return []; }
-}
-function saveCustomQuals(q) {
-  try { localStorage.setItem('cvol_custom_quals', JSON.stringify(q)); } catch(e) {}
-}
-
-function buildQualSelect() {
-  var sel = document.getElementById('q-type');
-  if (!sel) return;
-  var custom = loadCustomQuals();
-  var allQuals = DEFAULT_QUALS.concat(custom);
-  var current = sel.value;
-  sel.innerHTML = allQuals.map(function(q) {
-    return '<option value="'+q+'">'+q+'</option>';
-  }).join('') +
-  '<option value="__add__">+ Ajouter une qualification...</option>' +
-  (custom.length ? '<option value="__del__">🗑 Supprimer une qualification...</option>' : '');
-  if (current && allQuals.indexOf(current) >= 0) sel.value = current;
-}
-
-function checkCustomQual(sel) {
-  var wrap = document.getElementById('q-custom-wrap');
-  if (sel.value === '__add__') {
-    wrap.style.display = 'block';
-    document.getElementById('q-custom').value = '';
-    document.getElementById('q-custom').focus();
-  } else if (sel.value === '__del__') {
-    var custom = loadCustomQuals();
-    if (!custom.length) { showToast('Aucune qualification personnalisée', true); buildQualSelect(); return; }
-    var name = prompt('Quelle qualification supprimer ?\n' + custom.join(', '));
-    if (name && custom.indexOf(name) >= 0) {
-      custom.splice(custom.indexOf(name), 1);
-      saveCustomQuals(custom);
-      buildQualSelect();
-      showToast('✓ ' + name + ' supprimée');
-    } else {
-      buildQualSelect();
-    }
-  } else {
-    wrap.style.display = 'none';
-  }
-}
-
-function addCustomQual() {
-  var name = document.getElementById('q-custom').value.trim();
-  if (!name) { showToast('⚠ Entrez un nom', true); return; }
-  var custom = loadCustomQuals();
-  var all = DEFAULT_QUALS.concat(custom);
-  if (all.indexOf(name) >= 0) { showToast('⚠ Déjà dans la liste', true); return; }
-  custom.push(name);
-  saveCustomQuals(custom);
-  buildQualSelect();
-  document.getElementById('q-type').value = name;
-  document.getElementById('q-custom-wrap').style.display = 'none';
-  showToast('✓ ' + name + ' ajoutée');
 }
 
 </script>
