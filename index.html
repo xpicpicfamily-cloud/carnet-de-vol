@@ -1460,7 +1460,10 @@ async function loadStatsData() {
         dbg(s + ': vide');
       }
     }
-    dbg('Total: ' + allRows.length + ' vols');
+    var total = allRows.length;
+    showToast('Stats: H=' + allRows.filter(function(r){return r.cat==='Hélicoptère';}).length + 
+              ' A=' + allRows.filter(function(r){return r.cat==='Avion';}).length +
+              ' S=' + allRows.filter(function(r){return r.cat==='Simulateur';}).length, total===0);
     return allRows;
   } catch(e) {
     var box = document.getElementById('debug-box');
