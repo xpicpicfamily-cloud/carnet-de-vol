@@ -1530,6 +1530,19 @@ function selectYear(y, btn) {
   loadStatsData().then(function(rows){ computeStats(rows, y); });
 }
 
+function toMins(hhmm) {
+  if (!hhmm) return 0;
+  if (hhmm instanceof Date) return hhmm.getUTCHours()*60 + hhmm.getUTCMinutes();
+  if (typeof hhmm === 'number') return Math.round(hhmm * 24 * 60);
+  var s = String(hhmm).trim();
+  if (!s || s==='0' || s==='0:00' || s==='00:00') return 0;
+  var p = s.split(':');
+  if (p.length >= 2) return (parseInt(p[0])||0)*60 + (parseInt(p[1])||0);
+  var n = parseFloat(s.replace(',','.'));
+  if (!isNaN(n) && n > 0) return Math.round(n * 60);
+  return 0;
+}
+
 function computeStats(allRows, year) {
   // Filtrer par année
   var rows = allRows.filter(function(r) {
