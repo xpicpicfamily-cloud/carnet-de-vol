@@ -1448,7 +1448,8 @@ async function loadStatsData() {
                 '/values/'+range+'?majorDimension=ROWS';
       var resp = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
       var data = await resp.json();
-      if (data.error) { dbg('ERREUR ' + s + ': ' + JSON.stringify(data.error)); continue; }
+      showToast(s + ': status=' + resp.status + ' keys=' + Object.keys(data).join(','), false);
+      if (data.error) { showToast('ERR: ' + JSON.stringify(data.error), true); continue; }
       if (data.values) {
         var count = 0;
         // Afficher la première date pour debug
