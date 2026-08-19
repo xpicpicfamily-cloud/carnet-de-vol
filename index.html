@@ -10,7 +10,7 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
   .app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;}
-
+ 
   /* ── SETUP SCREEN ── */
   .setup-screen{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;}
   .setup-logo{text-align:center;margin-bottom:24px;}
@@ -28,7 +28,7 @@
   .setup-note a{color:var(--accent);}
   .btn-setup{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent) 0%,#0066ff 100%);border:none;border-radius:10px;color:#000;font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,0.3);}
   .btn-setup:active{transform:scale(0.98);}
-
+ 
   /* ── MAIN APP ── */
   header{padding:18px 20px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,212,255,0.05) 0%,transparent 100%);position:relative;}
   header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
@@ -167,7 +167,7 @@
   .fleet-card .del-btn{flex-shrink:0;width:32px;height:32px;background:rgba(255,68,68,0.08);border:1px solid rgba(255,68,68,0.35);border-radius:6px;color:#ff6666;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .settings-link{font-family:var(--font-mono);font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:inline-block;margin-top:8px;}
   .settings-link:hover{color:var(--accent);}
-
+ 
   /* ── AUTOCOMPLETE TERRAINS ── */
   .ac-wrap{position:relative;}
   .ac-drop{position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid var(--accent);border-top:none;border-radius:0 0 6px 6px;z-index:100;max-height:200px;overflow-y:auto;display:none;}
@@ -176,7 +176,7 @@
   .ac-item:hover,.ac-item.selected{background:rgba(0,212,255,0.1);}
   .ac-icao{color:var(--accent);font-weight:700;min-width:50px;}
   .ac-name{color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-
+ 
   /* ── QUALIFS ── */
   .qual-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
   .qual-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
@@ -215,7 +215,7 @@
   .ocr-result p{font-family:var(--font-mono);font-size:11px;color:var(--green);margin:0 0 6px;}
   .ocr-spinner{display:none;text-align:center;padding:16px;font-family:var(--font-mono);font-size:11px;color:var(--accent);}
   .ocr-spinner.show{display:block;}
-
+ 
   /* ── STATS ── */
   .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
   .stat-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
@@ -257,7 +257,7 @@
 </head>
 <body>
 <div class="app" id="app">
-
+ 
   <!-- ── SETUP SCREEN ── -->
   <div id="setup-screen" class="setup-screen" style="display:none;">
     <div class="setup-logo">
@@ -265,7 +265,7 @@
       <h1>CARNET DE VOL</h1>
       <p>PILOT LOGBOOK — CONFIGURATION</p>
     </div>
-
+ 
     <div class="setup-section">
       <div class="setup-section-title">Pilote</div>
       <div class="setup-field">
@@ -277,7 +277,7 @@
         <input type="text" id="cfg-home-base" placeholder="LFPG" autocapitalize="characters" maxlength="4">
       </div>
     </div>
-
+ 
     <div class="setup-section">
       <div class="setup-section-title">Google Sheets</div>
       <div class="setup-note">
@@ -298,10 +298,10 @@
         <input type="text" id="cfg-private-key" placeholder="-----BEGIN PRIVATE KEY-----...">
       </div>
     </div>
-
+ 
     <button class="btn-setup" onclick="saveConfig()">ENREGISTRER ET DÉMARRER ✓</button>
   </div>
-
+ 
   <!-- ── MAIN APP ── -->
   <div id="main-app" style="display:none;">
     <header>
@@ -323,7 +323,7 @@
       <div class="tab" onclick="switchTab('qualifs')" id="tab-btn-qualifs">Qualifs</div>
       <div class="tab" onclick="switchTab('stats')">Stats</div>
     </div>
-
+ 
     <div class="content" id="tab-form">
       <div class="section-title">Type d'aéronef</div>
       <div class="type-toggle">
@@ -426,23 +426,23 @@
         <span class="settings-link" onclick="openSettings()">⚙ Paramètres</span>
       </div>
     </div>
-
+ 
     <div class="content" id="tab-history" style="display:none;">
       <div class="section-title">Vols de cette session</div>
       <div id="history-list"><div class="empty-state"><div class="icon">🛫</div><p>Aucun vol enregistré.</p></div></div>
     </div>
-
+ 
     <div class="content" id="tab-fleet" style="display:none;">
       <div class="section-title">Flotte enregistrée</div>
       <div id="fleet-list"></div>
       <button class="btn-submit" style="margin-top:8px;" onclick="openModal()">+ Ajouter un aéronef</button>
-
+ 
     <div class="content" id="tab-stats" style="display:none;">
       <!-- Sélecteur d'année -->
       <div class="section-title">Statistiques</div>
       <div id="debug-box" style="display:none;background:#1a0000;border:1px solid #ff4444;border-radius:8px;padding:10px;margin-bottom:12px;font-family:monospace;font-size:10px;color:#ff6666;white-space:pre-wrap;max-height:150px;overflow-y:auto;"></div>
       <div class="stats-year-sel" id="stats-year-sel"></div>
-
+ 
       <!-- KPI cards -->
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-card-val" id="s-total-h">--</div><div class="stat-card-lbl">Heures vol</div></div>
@@ -450,7 +450,7 @@
         <div class="stat-card"><div class="stat-card-val green" id="s-jours">--</div><div class="stat-card-lbl">Jours volés</div></div>
         <div class="stat-card"><div class="stat-card-val purple" id="s-nuit">--</div><div class="stat-card-lbl">Heures nuit</div></div>
       </div>
-
+ 
       <!-- Heatmap jours volés -->
       <div class="chart-box">
         <div class="chart-box-title">Jours volés dans l'année</div>
@@ -466,19 +466,19 @@
           <span>Plus</span>
         </div>
       </div>
-
+ 
       <!-- Heures par mois -->
       <div class="chart-box">
         <div class="chart-box-title">Heures par mois</div>
         <div id="chart-months"></div>
       </div>
-
+ 
       <!-- Répartition par type -->
       <div class="chart-box">
         <div class="chart-box-title">Heures par type d'aéronef</div>
         <div id="chart-types"></div>
       </div>
-
+ 
       <!-- Jour vs Nuit -->
       <div class="chart-box">
         <div class="chart-box-title">Répartition Jour / Nuit</div>
@@ -487,16 +487,16 @@
           <div class="pie-legend" id="pie-legend"></div>
         </div>
       </div>
-
+ 
       <!-- Heures par rôle -->
       <div class="chart-box">
         <div class="chart-box-title">Heures par rôle</div>
         <div id="chart-roles"></div>
       </div>
     </div>
-
+ 
     </div>
-
+ 
     <div class="content" id="tab-qualifs" style="display:none;">
       <div class="notif-banner" id="notif-banner">⚠ Activez les notifications pour recevoir les alertes d'expiration.</div>
       
@@ -507,14 +507,14 @@
       <div class="qual-section-title">Visites Médicales</div>
       <div id="qualifs-medicals"></div>
       <button class="btn-add-qual" onclick="openQualModal('medical')">+ Ajouter une visite médicale</button>
-
+ 
       <div class="qual-section-title">Récences</div>
       <div id="qualifs-recences"></div>
       <button class="btn-add-qual" onclick="openQualModal('recence')">+ Ajouter une récence</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- Modal aéronef -->
 <div class="modal-backdrop" id="modal">
   <div class="modal">
@@ -534,7 +534,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Modal suppression -->
 <div class="modal-backdrop" id="modal-delete">
   <div class="modal">
@@ -546,7 +546,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Modal paramètres -->
 <div class="modal-backdrop" id="modal-settings">
   <div class="modal">
@@ -565,8 +565,8 @@
     </div>
   </div>
 </div>
-
-
+ 
+ 
 <!-- Modal ajout qualification -->
 <div class="modal-backdrop modal-qual" id="modal-qual">
   <div class="modal" style="max-width:380px;">
@@ -635,29 +635,29 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="loading-overlay" id="loading"><div class="loading-ring"></div><div class="loading-text" id="loading-text">SYNCHRONISATION...</div></div>
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 // ── CONFIG (chargée depuis localStorage) ─────────────────────────
 var CONFIG = {};
-
+ 
 function loadConfig() {
   try {
     var s = localStorage.getItem('cvol_config');
     CONFIG = s ? JSON.parse(s) : {};
   } catch(e) { CONFIG = {}; }
 }
-
+ 
 function saveConfigToStorage() {
   try { localStorage.setItem('cvol_config', JSON.stringify(CONFIG)); } catch(e) {}
 }
-
+ 
 function isConfigured() {
   return CONFIG.sheetId && CONFIG.clientEmail && CONFIG.privateKey && CONFIG.pilotName;
 }
-
+ 
 // ── INIT ──────────────────────────────────────────────────────────
 window.onload = function() {
   loadConfig();
@@ -667,14 +667,14 @@ window.onload = function() {
     document.getElementById('setup-screen').style.display = '';
   }
 };
-
+ 
 function saveConfig() {
   var name  = document.getElementById('cfg-pilot-name').value.trim();
   var base  = document.getElementById('cfg-home-base').value.trim().toUpperCase();
   var sid   = document.getElementById('cfg-sheet-id').value.trim();
   var email = document.getElementById('cfg-client-email').value.trim();
   var key   = document.getElementById('cfg-private-key').value.trim();
-
+ 
   if (!name || !sid || !email || !key) {
     showToast('⚠ Remplis tous les champs', true); return;
   }
@@ -685,24 +685,24 @@ function saveConfig() {
   document.getElementById('setup-screen').style.display = 'none';
   startApp();
 }
-
+ 
 function startApp() {
   document.getElementById('main-app').style.display = '';
   document.getElementById('header-pilot-name').textContent = CONFIG.pilotName || '—';
-
+ 
   // Default values
   var today = new Date().toISOString().split('T')[0];
   document.getElementById('f-date').value = today;
   document.getElementById('f-pilots').value = CONFIG.pilotName || '';
   document.getElementById('f-from').value = CONFIG.homeBase || '';
   document.getElementById('f-to').value = CONFIG.homeBase || '';
-
+ 
   renderAircraftSelect();
   renderFleet();
   getGPS();
   checkQualifsBadge();
 }
-
+ 
 // ── SETTINGS ─────────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('s-pilot-name').value = CONFIG.pilotName || '';
@@ -725,7 +725,7 @@ function resetApp() {
   localStorage.clear();
   location.reload();
 }
-
+ 
 // ── FLEET ─────────────────────────────────────────────────────────
 function loadFleet() {
   try { var s = localStorage.getItem('cvol_fleet'); return s ? JSON.parse(s) : {}; }
@@ -733,7 +733,7 @@ function loadFleet() {
 }
 function saveFleet() { try { localStorage.setItem('cvol_fleet', JSON.stringify(fleet)); } catch(e) {} }
 var fleet = loadFleet();
-
+ 
 // ── SUN CALC ─────────────────────────────────────────────────────
 function toRad(d){return d*Math.PI/180;}function toDeg(r){return r*180/Math.PI;}
 function calcSunTimes(lat,lon,dateStr){
@@ -751,9 +751,9 @@ function calcSunTimes(lat,lon,dateStr){
   return{rise:toUTCMin(Jt-W/360),set:toUTCMin(Jt+W/360)};
 }
 function minsToHHMM(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
-
+ 
 var gpsLat=null,gpsLon=null,sunRiseMin=null,sunSetMin=null,nightStartMin=null,nightEndMin=null;
-
+ 
 function updateSunDisplay(){
   var date=document.getElementById('f-date').value;
   if(!gpsLat||!date)return;
@@ -768,14 +768,14 @@ function updateSunDisplay(){
   document.getElementById('night-end').textContent='→ '+minsToHHMM(nightEndMin);
   updateDayNight();
 }
-
+ 
 function calcDayNightMinutes(offMin,onMin,nightStart,nightEnd){
   var total=onMin-offMin;if(total<0)total+=1440;if(total===0)return{day:0,night:0};
   var nightMins=0;
   for(var i=0;i<total;i++){var t=(offMin+i)%1440;if(nightStart>nightEnd?(t>=nightStart||t<nightEnd):(t>=nightStart&&t<nightEnd))nightMins++;}
   return{night:nightMins,day:total-nightMins};
 }
-
+ 
 function updateDayNight(){
   if(!timeOff||!timeOn){document.getElementById('dn-wrap').style.display='none';document.getElementById('dn-no-gps').style.display='';return;}
   if(nightStartMin===null){document.getElementById('dn-no-gps').style.display='';document.getElementById('dn-wrap').style.display='none';return;}
@@ -790,7 +790,7 @@ function updateDayNight(){
   document.getElementById('dn-night-val').textContent=minsToHHMM(r.night);
   window._dayMin=r.day;window._nightMin=r.night;
 }
-
+ 
 function getGPS(){
   var dot=document.getElementById('gps-dot'),txt=document.getElementById('gps-text');
   dot.className='gps-dot loading';txt.textContent='Localisation en cours...';
@@ -802,7 +802,7 @@ function getGPS(){
   );
 }
 function onDateChange(){updateSunDisplay();}
-
+ 
 // ── CLOCK ─────────────────────────────────────────────────────────
 var timeOff='',timeOn='';
 function stampClass(){return currentType==='plane'?'stamped-plane':currentType==='sim'?'stamped-sim':'stamped';}
@@ -838,7 +838,7 @@ function calcDuration(){
   var dur=String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0');
   document.getElementById('duration-display').textContent=dur;return dur;
 }
-
+ 
 // ── TYPE ──────────────────────────────────────────────────────────
 var currentType='heli';
 function setType(t){
@@ -851,7 +851,7 @@ function setType(t){
   if(timeOn)document.getElementById('stamp-on').className='clock-stamp '+stampClass();
   renderAircraftSelect();
 }
-
+ 
 // ── AIRCRAFT ──────────────────────────────────────────────────────
 function renderAircraftSelect(){
   var sel=document.getElementById('f-aircraft'),prev=sel.value;sel.innerHTML='';
@@ -866,10 +866,10 @@ function onAircraftChange(){
   if(fleet[reg]){badge.textContent=fleet[reg].type;badge.className='aircraft-type-badge '+fleet[reg].cat;}
   else{badge.textContent='—';badge.className='aircraft-type-badge';}
 }
-
+ 
 // ── TABS ──────────────────────────────────────────────────────────
 // switchTab redéfini dans le module qualifs
-
+ 
 // ── MODAL aéronef ─────────────────────────────────────────────────
 function openModal(){document.getElementById('modal').classList.add('show');}
 function closeModal(){document.getElementById('modal').classList.remove('show');document.getElementById('m-reg').value='';document.getElementById('m-type').value='';}
@@ -887,7 +887,7 @@ function renderFleet(){
   document.getElementById('fleet-list').innerHTML=html||'<div style="color:var(--muted);font-family:var(--font-mono);font-size:12px;padding:12px;">Aucun aéronef.</div>';
 }
 function deleteAircraft(reg){if(!confirm('Supprimer '+reg+' ?'))return;delete fleet[reg];saveFleet();renderAircraftSelect();renderFleet();showToast('✓ '+reg+' supprimé');}
-
+ 
 // ── DELETE MODAL ──────────────────────────────────────────────────
 var pendingDeleteIdx=null;
 function openDeleteModal(idx){
@@ -922,7 +922,7 @@ async function confirmDelete(){
   }catch(e){showToast('✗ '+e.message,true);}
   finally{setLoading(false);}
 }
-
+ 
 // ── AUTH ──────────────────────────────────────────────────────────
 var accessToken=null,tokenExpiry=0;
 function b64u(s){return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');}
@@ -953,11 +953,11 @@ async function getToken(){
   var d=await r.json();if(!d.access_token)throw new Error(JSON.stringify(d));
   accessToken=d.access_token;tokenExpiry=Date.now()+(d.expires_in-60)*1000;return accessToken;
 }
-
+ 
 // ── SUBMIT ────────────────────────────────────────────────────────
 var sessionFlights=[],sessionMinutes=0;
 var SHEET_MAP={heli:'Hélicoptère',plane:'Avion',sim:'Simulateur'};
-
+ 
 async function submitFlight(){
   var date=document.getElementById('f-date').value,ac=document.getElementById('f-aircraft').value;
   var from=document.getElementById('f-from').value.trim().toUpperCase(),to=document.getElementById('f-to').value.trim().toUpperCase();
@@ -1005,7 +1005,7 @@ async function submitFlight(){
   }catch(e){showToast('✗ '+e.message,true);}
   finally{setLoading(false);}
 }
-
+ 
 function resetForm(){
   timeOff='';timeOn='';window._dayMin=undefined;window._nightMin=undefined;
   ['off','on'].forEach(function(w){document.getElementById('stamp-'+w).textContent='--:--';document.getElementById('stamp-'+w).className='clock-stamp';closeEditor(w);});
@@ -1018,13 +1018,13 @@ function resetForm(){
   document.getElementById('dn-wrap').style.display='none';
   document.getElementById('dn-no-gps').style.display='';
 }
-
+ 
 function updateStats(){
   document.getElementById('stat-flights').textContent=sessionFlights.length;
   document.getElementById('stat-hours').textContent=String(Math.floor(sessionMinutes/60)).padStart(2,'0')+':'+String(sessionMinutes%60).padStart(2,'0');
   document.getElementById('stat-status').textContent='SYNC ✓';
 }
-
+ 
 function updateHistory(){
   var list=document.getElementById('history-list');
   var labels={heli:'🚁 Hélico',plane:'✈ Avion',sim:'🖥️ Sim'};
@@ -1039,16 +1039,16 @@ function updateHistory(){
       +'</div>';
   }).join('');
 }
-
+ 
 function setLoading(on,msg){document.getElementById('loading').classList.toggle('show',on);if(msg)document.getElementById('loading-text').textContent=msg;document.getElementById('btn-submit').disabled=on;}
 function showToast(msg,err){
   var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'');
   setTimeout(function(){t.classList.add('show');},10);setTimeout(function(){t.classList.remove('show');},3500);
 }
-
+ 
 // ── BASE TERRAINS (chargée depuis airports.js) ──────────────────
 var AIRPORTS = []; // Sera rempli par airports.js
-
+ 
 // Index de recherche
 var AC_IDX = null;
 function buildIndex() {
@@ -1068,7 +1068,7 @@ function buildIndex() {
     });
   });
 }
-
+ 
 function acSearch(input, dropId) {
   buildIndex();
   var q = input.value.trim().toUpperCase();
@@ -1100,7 +1100,7 @@ function acSearch(input, dropId) {
   drop.classList.add('open');
   drop.querySelector('.ac-item') && drop.querySelector('.ac-item').classList.add('selected');
 }
-
+ 
 function acSelect(item, dropId, inputId) {
   var icao = item.getAttribute('data-icao');
   var lat  = parseFloat(item.getAttribute('data-lat'));
@@ -1115,7 +1115,7 @@ function acSelect(item, dropId, inputId) {
     updateSunDisplay();
   }
 }
-
+ 
 function acKey(event, dropId) {
   var drop = document.getElementById(dropId);
   var items = drop.querySelectorAll('.ac-item');
@@ -1138,27 +1138,27 @@ function acKey(event, dropId) {
     drop.classList.remove('open');
   }
 }
-
+ 
 // Fermer dropdown si clic ailleurs
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.ac-wrap')) {
     document.querySelectorAll('.ac-drop').forEach(function(d){d.classList.remove('open');});
   }
 });
-
-
+ 
+ 
 // ── QUALIFICATIONS ───────────────────────────────────────────────
-
+ 
 var qualEditIdx = null;
 var qualModalCat = 'licence';
-
+ 
 function loadQualifs() {
   try { return JSON.parse(localStorage.getItem('cvol_qualifs')||'[]'); } catch(e) { return []; }
 }
 function saveQualifs(q) {
   try { localStorage.setItem('cvol_qualifs', JSON.stringify(q)); } catch(e) {}
 }
-
+ 
 function switchTab(t) {
   ['form','history','fleet','qualifs','stats'].forEach(function(id){
     var el = document.getElementById('tab-'+id);
@@ -1170,7 +1170,7 @@ function switchTab(t) {
   if (t==='qualifs') { renderQualifs(); requestNotifPermission(); }
   if (t==='stats')   { renderStats(); }
 }
-
+ 
 function daysUntil(dateStr) {
   if (!dateStr) return 9999;
   var exp = new Date(dateStr);
@@ -1178,7 +1178,7 @@ function daysUntil(dateStr) {
   now.setHours(0,0,0,0);
   return Math.round((exp-now)/(1000*60*60*24));
 }
-
+ 
 function qualStatus(days) {
   if (days < 0)  return {cls:'qual-exp',  badge:'badge-exp',  label:'EXPIRÉ'};
   if (days <= 7) return {cls:'qual-crit', badge:'badge-crit', label:'CRITIQUE'};
@@ -1186,13 +1186,13 @@ function qualStatus(days) {
   if (days <= 90) return {cls:'qual-warn', badge:'badge-warn', label:'À RENOUVELER'};
   return {cls:'qual-ok', badge:'badge-ok', label:'VALIDE'};
 }
-
+ 
 function renderQualifs() {
   var qualifs = loadQualifs();
   var licences = qualifs.filter(function(q){return q.cat!=='medical'&&q.cat!=='recence';});
   var medicals = qualifs.filter(function(q){return q.cat==='medical';});
   var recences = qualifs.filter(function(q){return q.cat==='recence';});
-
+ 
   function renderList(list, containerId) {
     var el = document.getElementById(containerId);
     if (!list.length) { el.innerHTML='<div style="color:var(--muted);font-family:var(--font-mono);font-size:11px;padding:8px;">Aucune entrée.</div>'; return; }
@@ -1217,20 +1217,20 @@ function renderQualifs() {
         +'</div></div>';
     }).join('');
   }
-
+ 
   renderList(licences, 'qualifs-licences');
   renderList(medicals, 'qualifs-medicals');
   renderList(recences, 'qualifs-recences');
-
+ 
   // Badge sur l\'onglet si qualif critique
   var critCount = qualifs.filter(function(q){ return daysUntil(q.expires) <= 30; }).length;
   var tabBtn = document.getElementById('tab-btn-qualifs');
   if (tabBtn) tabBtn.textContent = critCount > 0 ? 'Qualifs 🔴' : 'Qualifs';
-
+ 
   // Programmer les notifications
   scheduleNotifications(qualifs);
 }
-
+ 
 function openQualModal(cat) {
   qualEditIdx = null;
   qualModalCat = cat||'licence';
@@ -1244,7 +1244,7 @@ function openQualModal(cat) {
   document.getElementById('ocr-spinner').classList.remove('show');
   document.getElementById('modal-qual').classList.add('show');
 }
-
+ 
 function openQualModalEdit(idx) {
   var qualifs = loadQualifs();
   var q = qualifs[idx];
@@ -1262,12 +1262,12 @@ function openQualModalEdit(idx) {
   document.getElementById('ocr-spinner').classList.remove('show');
   document.getElementById('modal-qual').classList.add('show');
 }
-
+ 
 function closeQualModal() {
   document.getElementById('modal-qual').classList.remove('show');
   qualEditIdx = null;
 }
-
+ 
 function saveQual() {
   var type    = document.getElementById('q-type').value;
   var ref     = document.getElementById('q-ref').value.trim();
@@ -1288,7 +1288,7 @@ function saveQual() {
   renderQualifs();
   showToast('✓ Qualification enregistrée');
 }
-
+ 
 function deleteQual(idx) {
   if (!confirm('Supprimer cette qualification ?')) return;
   var qualifs = loadQualifs();
@@ -1297,12 +1297,12 @@ function deleteQual(idx) {
   renderQualifs();
   showToast('✓ Supprimé');
 }
-
+ 
 // ── OCR PAR PHOTO ─────────────────────────────────────────────────
 function triggerPhoto() {
   document.getElementById('photo-input').click();
 }
-
+ 
 async function processPhoto(input) {
   if (!input.files || !input.files[0]) return;
   var file = input.files[0];
@@ -1310,7 +1310,7 @@ async function processPhoto(input) {
   var result  = document.getElementById('ocr-result');
   spinner.classList.add('show');
   result.classList.remove('show');
-
+ 
   try {
     // Convertir en base64
     var b64 = await new Promise(function(res,rej){
@@ -1319,7 +1319,7 @@ async function processPhoto(input) {
       r.onerror = function(){ rej(new Error('Lecture image impossible')); };
       r.readAsDataURL(file);
     });
-
+ 
     // Appel API Claude OCR
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -1342,10 +1342,10 @@ async function processPhoto(input) {
         }]
       })
     });
-
+ 
     var data = await resp.json();
     var txt = data.content && data.content[0] ? data.content[0].text : '';
-
+ 
     // Parser le JSON retourné
     var jsonMatch = txt.match(/\{[^}]+\}/);
     if (jsonMatch) {
@@ -1370,7 +1370,7 @@ async function processPhoto(input) {
     input.value = '';
   }
 }
-
+ 
 // ── NOTIFICATIONS PUSH ────────────────────────────────────────────
 async function requestNotifPermission() {
   if (!('Notification' in window)) {
@@ -1387,7 +1387,7 @@ async function requestNotifPermission() {
     document.getElementById('notif-banner').classList.remove('show');
   }
 }
-
+ 
 function scheduleNotifications(qualifs) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   var thresholds = [90, 30, 7];
@@ -1417,7 +1417,7 @@ function scheduleNotifications(qualifs) {
     }
   });
 }
-
+ 
 // Vérifier les qualifs au démarrage
 function checkQualifsBadge() {
   var qualifs = loadQualifs();
@@ -1425,12 +1425,12 @@ function checkQualifsBadge() {
   var tabBtn = document.getElementById('tab-btn-qualifs');
   if (tabBtn && critCount > 0) tabBtn.textContent = 'Qualifs 🔴';
 }
-
-
+ 
+ 
 // ── STATISTIQUES ─────────────────────────────────────────────────
-
+ 
 var statsYear = new Date().getFullYear();
-
+ 
 async function loadStatsData() {
   function dbg(msg) {
     var box = document.getElementById('debug-box');
@@ -1467,7 +1467,7 @@ async function loadStatsData() {
     return [];
   }
 }
-
+ 
 function parseRowDate(dateStr) {
   if (!dateStr) return null;
   var s = String(dateStr).trim();
@@ -1484,7 +1484,7 @@ function parseRowDate(dateStr) {
   if (dateStr instanceof Date) return dateStr;
   return null;
 }
-
+ 
 async function renderStats() {
   // Réinitialiser le cache token pour forcer un nouveau token
   accessToken = null; tokenExpiry = 0;
@@ -1502,7 +1502,7 @@ async function renderStats() {
     showToast('Stats: aucune donnée', true);
     return;
   }
-
+ 
   try {
     // Détecter les années disponibles
     var years = {};
@@ -1511,25 +1511,25 @@ async function renderStats() {
       if (d) years[d.getFullYear()] = true;
     });
     var yearList = Object.keys(years).map(Number).sort();
-
+ 
     // Sélecteur années
     var sel = document.getElementById('stats-year-sel');
     sel.innerHTML = ['Tout'].concat(yearList.map(String)).map(function(y) {
       return '<button class="year-btn'+(String(statsYear)===String(y)||(!yearList.includes(statsYear)&&y==='Tout')?' active':'')+
              '" onclick="selectYear('+JSON.stringify(y)+', this)">'+y+'</button>';
     }).join('');
-
+ 
     computeStats(allRows, statsYear);
   } catch(e) { showToast('Stats erreur: '+e.message, true); }
 }
-
+ 
 function selectYear(y, btn) {
   statsYear = y;
   document.querySelectorAll('.year-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   loadStatsData().then(function(rows){ computeStats(rows, y); });
 }
-
+ 
 function toMins(hhmm) {
   if (!hhmm) return 0;
   if (hhmm instanceof Date) return hhmm.getUTCHours()*60 + hhmm.getUTCMinutes();
@@ -1542,7 +1542,7 @@ function toMins(hhmm) {
   if (!isNaN(n) && n > 0) return Math.round(n * 60);
   return 0;
 }
-
+ 
 function computeStats(allRows, year) {
   // Filtrer par année
   var rows = allRows.filter(function(r) {
@@ -1550,14 +1550,14 @@ function computeStats(allRows, year) {
     if (!d) return false;
     return year==='Tout' || d.getFullYear()===Number(year);
   });
-
+ 
   // KPIs
   var totalMins=0, nuitMins=0, vols=0;
   var flightDays = {};
   var byMonth = {};
   var byType = {};
   var byRole = {};
-
+ 
   rows.forEach(function(r) {
     var row = r.row;
     if (r.cat === 'Simulateur') return; // exclure sim des stats vol
@@ -1569,7 +1569,7 @@ function computeStats(allRows, year) {
     var role = row[1]||'?';    // Rôle col B
     var monthKey = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
     var dayKey = d.toISOString().split('T')[0];
-
+ 
     totalMins += dur;
     nuitMins += nuit;
     vols++;
@@ -1578,55 +1578,55 @@ function computeStats(allRows, year) {
     byType[type] = (byType[type]||0) + dur;
     byRole[role] = (byRole[role]||0) + dur;
   });
-
+ 
   // KPI cards
   document.getElementById('s-total-h').textContent = minsToHHMM(totalMins);
   document.getElementById('s-total-v').textContent = vols;
   document.getElementById('s-jours').textContent = Object.keys(flightDays).length;
   document.getElementById('s-nuit').textContent = minsToHHMM(nuitMins);
-
+ 
   // Heatmap
   renderHeatmap(flightDays, year);
-
+ 
   // Graphique mois
   renderBarChart('chart-months', byMonth, function(k){
     var m=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
     return m[parseInt(k.split('-')[1])-1];
   }, 'var(--accent)');
-
+ 
   // Graphique types
   renderBarChart('chart-types', byType, function(k){return k;}, 'var(--green)');
-
+ 
   // Pie jour/nuit
   renderPie(totalMins-nuitMins, nuitMins);
-
+ 
   // Graphique rôles
   renderBarChart('chart-roles', byRole, function(k){return k;}, 'var(--accent2)');
 }
-
+ 
 function renderHeatmap(flightDays, year) {
   var hm = document.getElementById('heatmap');
   var months = document.getElementById('hm-months');
   hm.innerHTML = '';
   months.innerHTML = '';
-
+ 
   var y = year==='Tout' ? new Date().getFullYear() : Number(year);
   var start = new Date(y, 0, 1);
   // Commencer au lundi précédent
   var startDay = start.getDay(); // 0=dim
   var offset = startDay === 0 ? 6 : startDay - 1;
-
+ 
   // Cellules vides au début
   for (var i=0; i<offset; i++) {
     var empty = document.createElement('div');
     empty.className = 'hm-cell';
     hm.appendChild(empty);
   }
-
+ 
   // Labels mois
   var monthLabels = ['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
   var monthCols = new Array(12).fill(0);
-
+ 
   var d = new Date(y, 0, 1);
   var col = offset;
   while (d.getFullYear() === y) {
@@ -1640,7 +1640,7 @@ function renderHeatmap(flightDays, year) {
     col++;
     d.setDate(d.getDate()+1);
   }
-
+ 
   // Afficher labels mois
   monthLabels.forEach(function(m, i) {
     var lbl = document.createElement('div');
@@ -1650,7 +1650,7 @@ function renderHeatmap(flightDays, year) {
     months.appendChild(lbl);
   });
 }
-
+ 
 function renderBarChart(containerId, data, labelFn, color) {
   var el = document.getElementById(containerId);
   if (!el) return;
@@ -1666,7 +1666,7 @@ function renderBarChart(containerId, data, labelFn, color) {
       +'</div>';
   }).join('');
 }
-
+ 
 function renderPie(jourMins, nuitMins) {
   var canvas = document.getElementById('pie-canvas');
   if (!canvas) return;
@@ -1678,7 +1678,7 @@ function renderPie(jourMins, nuitMins) {
     {val:jourMins, color:'#f6c90e', label:'Jour'},
     {val:nuitMins, color:'#7c6fcd', label:'Nuit'},
   ];
-
+ 
   ctx.clearRect(0,0,120,120);
   var startAngle = -Math.PI/2;
   var cx=60, cy=60, r=55;
@@ -1703,7 +1703,7 @@ function renderPie(jourMins, nuitMins) {
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(minsToHHMM(total), cx, cy);
-
+ 
   // Légende
   var legend = document.getElementById('pie-legend');
   legend.innerHTML = data.map(function(d) {
@@ -1711,8 +1711,8 @@ function renderPie(jourMins, nuitMins) {
       +d.label+' '+minsToHHMM(d.val)+' ('+Math.round(d.val/total*100)+'%)</div>';
   }).join('');
 }
-
-
+ 
+ 
 // ── DÉTECTION TERRAIN LE PLUS PROCHE ────────────────────────────
 function haversine(lat1, lon1, lat2, lon2) {
   var R = 6371;
@@ -1723,7 +1723,7 @@ function haversine(lat1, lon1, lat2, lon2) {
           Math.sin(dLon/2)*Math.sin(dLon/2);
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
-
+ 
 function findNearestAirport(lat, lon, maxKm) {
   if (!AIRPORTS || !AIRPORTS.length) return null;
   maxKm = maxKm || 5;
@@ -1735,7 +1735,7 @@ function findNearestAirport(lat, lon, maxKm) {
   });
   return best ? {icao: best[0], name: best[1], lat: best[2], lon: best[3], dist: bestDist} : null;
 }
-
+ 
 function detectNearestAndFill(fieldId) {
   if (!navigator.geolocation) return;
   navigator.geolocation.getCurrentPosition(function(pos) {
@@ -1756,7 +1756,8 @@ function detectNearestAndFill(fieldId) {
     }
   }, null, {timeout:5000, maximumAge:30000});
 }
-
+ 
 </script>
 </body>
 </html>
+ 
