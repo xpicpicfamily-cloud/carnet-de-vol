@@ -543,6 +543,8 @@ function saveConfig() {
   if (!name || !sid || !email || !key) {
     showToast('⚠ Remplis tous les champs', true); return;
   }
+  // Nettoyer l'email (retirer mailto: et espaces)
+  email = email.replace(/^mailto:/i, '').replace(/\s/g, '').trim();
   CONFIG = { pilotName: name, homeBase: base||'ZZZZ', sheetId: sid, clientEmail: email, privateKey: key };
   saveConfigToStorage();
   document.getElementById('setup-screen').style.display = 'none';
@@ -802,7 +804,8 @@ async function getToken(){
   if(accessToken&&Date.now()<tokenExpiry)return accessToken;
   var now=Math.floor(Date.now()/1000);
   var hdr=b64u(JSON.stringify({alg:'RS256',typ:'JWT'}));
-  var clm=b64u(JSON.stringify({iss:CONFIG.clientEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now-60}));
+  var cleanEmail=String(CONFIG.clientEmail||'').replace(/^mailto:/i,'').replace(/\s/g,'').trim();
+  var clm=b64u(JSON.stringify({iss:cleanEmail,scope:'https://www.googleapis.com/auth/spreadsheets',aud:'https://oauth2.googleapis.com/token',exp:now+3600,iat:now-60}));
   var rawKey = CONFIG.privateKey || '';
   rawKey = rawKey.replace(/\\n/g, '\n');
   rawKey = rawKey.replace(/\r/g, '');
@@ -1085,7 +1088,7 @@ async function requestNotifPermission() {
  
  
 // ── BASE TERRAINS ─────────────────────────────────────────────────
-var AIRPORTS = [];
+if (typeof AIRPORTS === 'undefined') { var AIRPORTS = []; }
 var AC_IDX = null;
  
 function buildIndex() {
