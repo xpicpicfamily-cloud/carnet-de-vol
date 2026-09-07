@@ -566,11 +566,6 @@ function startApp() {
   renderFleet();
   getGPS();
   checkQualifsBadge();
-  // Diagnostic base terrains
-  setTimeout(function(){
-    var n = (typeof AIRPORTS !== 'undefined' && AIRPORTS) ? AIRPORTS.length : -1;
-    showToast('Terrains charges: ' + n, n < 100);
-  }, 1500);
 }
  
 // ── SETTINGS ─────────────────────────────────────────────────────
