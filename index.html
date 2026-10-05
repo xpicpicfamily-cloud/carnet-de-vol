@@ -378,8 +378,9 @@
         <div class="field"><label>Atterrissages</label><input type="number" id="f-ldgs" value="1" min="0" max="99"></div>
         <div class="field"><label>Approches IFR</label><input type="number" id="f-ifr-app" value="0" min="0" max="99"></div>
       </div>
-      <div class="form-grid full" style="margin-bottom:6px;">
+      <div class="form-grid" style="margin-bottom:6px;">
         <div class="field"><label>Heures IFR</label><input type="text" id="f-ifr-h" placeholder="0:00"></div>
+        <div class="field"><label>Heures JVN</label><input type="text" id="f-jvn-h" placeholder="0:00"></div>
       </div>
       <div class="form-grid full" style="margin-bottom:6px;">
         <div class="field"><label>Équipage</label><input type="text" id="f-pilots"></div>
@@ -840,9 +841,19 @@ async function submitFlight(){
   var pilots=document.getElementById('f-pilots').value.trim();
   var ifrH=document.getElementById('f-ifr-h').value.trim()||'';
   var ifrApp=document.getElementById('f-ifr-app').value||'0';
+  var jvnH=document.getElementById('f-jvn-h').value.trim();
+  if(jvnH){
+    var jm=jvnH.match(/^(\d+)[.,](\d+)$/);
+    if(jm){var jt=Math.round(parseFloat(jm[1]+'.'+jm[2])*60);jvnH=Math.floor(jt/60)+':'+String(jt%60).padStart(2,'0');}
+    if(!/^\d+:[0-5]\d$/.test(jvnH)){showToast('⚠ Heures JVN : format 0:00',true);return;}
+  }
   if(!date||!timeOff||!timeOn||!from||!to){showToast('⚠ Remplis tous les champs',true);return;}
   if(!ac){showToast('⚠ Ajoute un aéronef dans l\'onglet Flotte',true);switchTab('fleet');return;}
   var dur=calcDuration();if(!dur)return;
+  if(jvnH){
+    var dp=dur.split(':').map(Number),jp=jvnH.split(':').map(Number);
+    if(jp[0]*60+jp[1]>dp[0]*60+dp[1]){showToast('⚠ JVN superieur a la duree du vol',true);return;}
+  }
   var ys=date.split('-'),dateF=ys[2]+'.'+ys[1]+'.'+ys[0];
   var acType=fleet[ac]?fleet[ac].type:'';
   var catLabel=currentType==='heli'?'Hélicoptère':currentType==='plane'?'Avion':'Simulateur';
@@ -853,6 +864,8 @@ async function submitFlight(){
   var monoH=isMulti?'':dur,multiH=isMulti?dur:'';
   var sheetName=SHEET_MAP[currentType]||'Hélicoptère';
   var row=[dateF,role,timeOff,timeOn,dur,ldgs,ac,acType,catLabel,from,to,pilots,monoH,multiH,dayH,nightH,ifrH,ifrApp];
+  if(jvnH) row.push(jvnH);
+  var lastCol=jvnH?'S':'R';
   setLoading(true,'→ '+sheetName+'...');
   try{
     var token=await getToken();
@@ -867,7 +880,7 @@ async function submitFlight(){
       body:JSON.stringify({requests:[{insertDimension:{range:{sheetId:sheetId,dimension:'ROWS',startIndex:2,endIndex:3},inheritFromBefore:false}}]})
     });
     if(!insertResp.ok){var e=await insertResp.json();throw new Error(e.error&&e.error.message||insertResp.statusText);}
-    var resp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+'/values/'+encodeURIComponent(sheetName)+'!A3:R3?valueInputOption=USER_ENTERED',{
+    var resp=await fetch('https://sheets.googleapis.com/v4/spreadsheets/'+CONFIG.sheetId+'/values/'+encodeURIComponent(sheetName)+'!A3:'+lastCol+'3?valueInputOption=USER_ENTERED',{
       method:'PUT',headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'},
       body:JSON.stringify({values:[row]})
     });
@@ -888,6 +901,7 @@ function resetForm(){
   document.getElementById('f-to').value=CONFIG.homeBase||'';
   document.getElementById('f-ldgs').value='1';
   document.getElementById('f-ifr-h').value='';
+  document.getElementById('f-jvn-h').value='';
   document.getElementById('f-ifr-app').value='0';
   document.getElementById('duration-display').textContent='--:--';
   document.getElementById('dn-wrap').style.display='none';
