@@ -1009,13 +1009,30 @@ function renderQualifs() {
   scheduleNotifications(qualifs);
 }
  
+var QUAL_OPTS_STD = [['ATPL(H)','ATPL(H)'],['IR(H)','IR(H)'],['H145','Qualification H145'],['AW139','Qualification AW139'],['TRI(H)','TRI(H)'],['TRE(H)','TRE(H)'],['Medical Cl.1','Médical Classe 1'],['Medical Cl.2','Médical Classe 2'],['SEP(A)','SEP(A)']];
+var QUAL_OPTS_REC = [['CHL JOUR','CHL JOUR'],['CHL Nuit','CHL Nuit'],['CEL','CEL'],['VSV','VSV']];
+function buildQualTypeOptions(cat, current) {
+  var sel = document.getElementById('q-type');
+  if (!sel) return;
+  var list = (cat==='recence') ? QUAL_OPTS_REC : QUAL_OPTS_STD;
+  var found = false;
+  var html = '';
+  for (var i=0;i<list.length;i++) {
+    if (list[i][0]===current) found = true;
+    html += '<option value="'+list[i][0]+'">'+list[i][1]+'</option>';
+  }
+  if (current && !found) html += '<option value="'+String(current).replace(/"/g,'&quot;')+'">'+String(current).replace(/</g,'&lt;')+'</option>';
+  sel.innerHTML = html;
+}
+ 
 function openQualModal(cat) {
   qualEditIdx = null;
   qualModalCat = cat || 'licence';
   document.getElementById('modal-qual-title').textContent =
     cat==='medical' ? 'Nouvelle visite medicale' :
     cat==='recence' ? 'Nouvelle recence' : 'Nouvelle qualification';
-  var defVal = cat==='medical' ? 'Medical Cl.1' : 'ATPL(H)';
+  var defVal = cat==='medical' ? 'Medical Cl.1' : cat==='recence' ? 'CHL JOUR' : 'ATPL(H)';
+  buildQualTypeOptions(qualModalCat, defVal);
   var sel = document.getElementById('q-type');
   if (sel) sel.value = defVal;
   document.getElementById('q-ref').value = '';
@@ -1033,6 +1050,7 @@ function openQualModalEdit(idx) {
   qualEditIdx = idx;
   qualModalCat = q.cat || 'licence';
   document.getElementById('modal-qual-title').textContent = 'Modifier — '+q.type;
+  buildQualTypeOptions(qualModalCat, q.type || '');
   document.getElementById('q-type').value = q.type || '';
   document.getElementById('q-ref').value = q.ref || '';
   document.getElementById('q-issued').value = q.issued || '';
